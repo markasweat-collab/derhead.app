@@ -7,3 +7,6 @@
 
 # dependencies
 node_modules
+
+# generated at build time to bust static asset cache
+apps/web/public/.deploy-revision
