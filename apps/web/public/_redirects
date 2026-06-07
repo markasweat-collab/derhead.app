@@ -1,0 +1,3 @@
+# Redirects are handled by the Worker (apps/web/src/worker.ts).
+# www.derhead.app -> derhead.app is a 301 in worker code.
+# Workers _redirects only supports relative paths — no absolute URLs.
