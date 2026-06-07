@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Security — derhead.app</title>
+    <meta
+      name="description"
+      content="How derhead.app secures MCP servers — authentication, tool allowlists, logging, and deployment isolation."
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="logo" href="/">
+          <span class="logo-mark" aria-hidden="true"></span>
+          derhead<span class="logo-dot">.app</span>
+        </a>
+
+        <button
+          class="nav-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="site-nav"
+        >
+          <span class="nav-toggle-bar"></span>
+          <span class="nav-toggle-bar"></span>
+          <span class="sr-only">Menu</span>
+        </button>
+
+        <nav id="site-nav" class="site-nav">
+          <a href="/#features">Features</a>
+          <a href="/#architecture">Architecture</a>
+          <a href="/docs/">Docs</a>
+          <a href="/security/" class="nav-active">Security</a>
+          <a class="nav-cta" href="/#contact">Get early access</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <div class="page-hero">
+        <div class="container">
+          <p class="eyebrow">Security</p>
+          <h1>Built secure from the ground up.</h1>
+          <p class="lead">
+            MCP tools can reach sensitive systems. derhead is designed so you ship
+            with confidence — not hope.
+          </p>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <div class="container prose">
+          <h2>Deployment isolation</h2>
+          <p>
+            The public website, API, and MCP server run as separate Cloudflare
+            deploys on separate domains. The marketing site at derhead.app has no
+            API routes and no MCP tools — it cannot accidentally expose backend
+            functionality.
+          </p>
+
+          <h2>Authentication</h2>
+          <p>
+            Every request to <code>mcp.derhead.app/mcp</code> requires a valid
+            Bearer token. Requests without a token, or with an invalid token, are
+            rejected with a 401 and logged.
+          </p>
+          <div class="code-block">Authorization: Bearer &lt;MCP_AUTH_TOKEN&gt;</div>
+          <p>
+            Store <code>MCP_AUTH_TOKEN</code> as a Cloudflare Worker secret — never
+            in source code or the public website.
+          </p>
+
+          <h2>Tool allowlists</h2>
+          <p>
+            Only tools explicitly registered in the MCP server code are available.
+            The current allowlist contains harmless test tools only:
+          </p>
+          <ul>
+            <li><strong>ping</strong> — returns "pong"</li>
+            <li><strong>echo</strong> — echoes back a message</li>
+            <li><strong>get_time</strong> — returns the current UTC timestamp</li>
+          </ul>
+          <p>
+            New tools must be deliberately added to the server and deployed. There
+            is no dynamic tool registration that could be exploited at runtime.
+          </p>
+
+          <h2>Logging &amp; audit</h2>
+          <p>
+            Both the API and MCP workers emit structured JSON logs for:
+          </p>
+          <ul>
+            <li>Authentication failures (with source IP)</li>
+            <li>Tool invocations (tool name, timestamp)</li>
+            <li>Request metadata (method, path, duration)</li>
+          </ul>
+          <p>
+            Logs are available through Cloudflare Workers observability. Review them
+            before expanding beyond test tools.
+          </p>
+
+          <h2>What not to do yet</h2>
+          <div class="callout">
+            <p>
+              Do not connect private accounts, production databases, or sensitive
+              third-party APIs until you have verified auth, logging, and tool
+              allowlists in your own environment. Start with test tools, confirm
+              everything works, then expand deliberately.
+            </p>
+          </div>
+
+          <h2>TLS &amp; transport</h2>
+          <p>
+            All derhead.app domains are served over HTTPS via Cloudflare. MCP
+            communication uses the Streamable HTTP transport — stateless and
+            compatible with Cloudflare Workers' request/response model.
+          </p>
+
+          <h2>Reporting issues</h2>
+          <p>
+            Found a security concern? Email
+            <a href="mailto:security@derhead.app">security@derhead.app</a>.
+          </p>
+
+          <p>
+            Ready to deploy? See the <a href="/docs/">getting started guide</a>.
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div class="footer-brand">
+          <a class="logo logo--footer" href="/">
+            <span class="logo-mark" aria-hidden="true"></span>
+            derhead<span class="logo-dot">.app</span>
+          </a>
+          <p>Secure hosting for MCP servers and Cursor-built apps.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer">
+          <a href="/#features">Features</a>
+          <a href="/#architecture">Architecture</a>
+          <a href="/docs/">Docs</a>
+          <a href="/security/">Security</a>
+          <a href="/#contact">Contact</a>
+        </nav>
+        <p class="footer-copy">&copy; 2026 derhead.app. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script src="/script.js"></script>
+  </body>
+</html>

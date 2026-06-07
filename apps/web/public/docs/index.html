@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Docs — derhead.app</title>
+    <meta
+      name="description"
+      content="Getting started with derhead.app — deploy MCP servers, connect ChatGPT Business, and understand the domain architecture."
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="logo" href="/">
+          <span class="logo-mark" aria-hidden="true"></span>
+          derhead<span class="logo-dot">.app</span>
+        </a>
+
+        <button
+          class="nav-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="site-nav"
+        >
+          <span class="nav-toggle-bar"></span>
+          <span class="nav-toggle-bar"></span>
+          <span class="sr-only">Menu</span>
+        </button>
+
+        <nav id="site-nav" class="site-nav">
+          <a href="/#features">Features</a>
+          <a href="/#architecture">Architecture</a>
+          <a href="/docs/" class="nav-active">Docs</a>
+          <a href="/security/">Security</a>
+          <a class="nav-cta" href="/#contact">Get early access</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <div class="page-hero">
+        <div class="container">
+          <p class="eyebrow">Documentation</p>
+          <h1>Getting started</h1>
+          <p class="lead">
+            Deploy MCP servers to derhead.app and connect them to ChatGPT Business.
+          </p>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <div class="container prose">
+          <h2>Domain structure</h2>
+          <p>
+            derhead.app uses separate Cloudflare deploys for each surface area.
+            This keeps the public website isolated from API and MCP endpoints.
+          </p>
+          <ul>
+            <li><strong>derhead.app</strong> — public website (Cloudflare Pages)</li>
+            <li><strong>www.derhead.app</strong> — redirects to derhead.app</li>
+            <li><strong>api.derhead.app</strong> — app API (Cloudflare Worker)</li>
+            <li><strong>mcp.derhead.app</strong> — MCP server (Cloudflare Worker, auth required)</li>
+            <li><strong>app.derhead.app</strong> — logged-in app UI (coming soon)</li>
+          </ul>
+
+          <h2>Deploy your MCP server</h2>
+          <p>
+            MCP servers live in the <code>apps/mcp</code> workspace. Deploy with
+            Wrangler:
+          </p>
+          <div class="code-block">cd apps/mcp
+npx wrangler secret put MCP_AUTH_TOKEN
+npm run deploy</div>
+          <p>
+            Set a strong, random token for <code>MCP_AUTH_TOKEN</code>. This is
+            required before any MCP tool can be invoked.
+          </p>
+
+          <h2>Connect ChatGPT Business</h2>
+          <p>
+            Once deployed, add your MCP server URL in ChatGPT Business workspace
+            settings:
+          </p>
+          <div class="code-block">https://mcp.derhead.app/mcp</div>
+          <p>
+            Include your auth token in the connection configuration. ChatGPT
+            Business will send it as a Bearer token on each request:
+          </p>
+          <div class="code-block">Authorization: Bearer &lt;your-mcp-auth-token&gt;</div>
+
+          <div class="callout">
+            <p>
+              <strong>Start with test tools only.</strong> The server ships with
+              ping, echo, and get_time — harmless tools for verifying connectivity.
+              Do not connect private accounts or data until auth, logging, and
+              tool allowlists are verified in your environment.
+            </p>
+          </div>
+
+          <h2>Verify connectivity</h2>
+          <p>Check that the MCP server is healthy:</p>
+          <div class="code-block">curl https://mcp.derhead.app/health</div>
+          <p>Test an authenticated MCP request (requires a valid token):</p>
+          <div class="code-block">curl -X POST https://mcp.derhead.app/mcp \
+  -H "Authorization: Bearer &lt;your-token&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'</div>
+
+          <h2>API endpoints</h2>
+          <p>
+            The app API runs separately at api.derhead.app. Available routes:
+          </p>
+          <ul>
+            <li><code>GET /health</code> — service health check</li>
+            <li><code>GET /v1/status</code> — operational status</li>
+            <li><code>GET /v1/info</code> — API metadata and domain map</li>
+          </ul>
+
+          <h2>Build in Cursor</h2>
+          <p>The typical workflow:</p>
+          <ol>
+            <li>Build your MCP server or app in Cursor</li>
+            <li>Deploy the API to <code>apps/api</code> and MCP to <code>apps/mcp</code></li>
+            <li>Set secrets and verify auth + logging</li>
+            <li>Connect ChatGPT Business to your MCP endpoint</li>
+            <li>Add real tools to the allowlist only when ready</li>
+          </ol>
+
+          <p>
+            Read the <a href="/security/">security overview</a> before connecting
+            anything sensitive.
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div class="footer-brand">
+          <a class="logo logo--footer" href="/">
+            <span class="logo-mark" aria-hidden="true"></span>
+            derhead<span class="logo-dot">.app</span>
+          </a>
+          <p>Secure hosting for MCP servers and Cursor-built apps.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer">
+          <a href="/#features">Features</a>
+          <a href="/#architecture">Architecture</a>
+          <a href="/docs/">Docs</a>
+          <a href="/security/">Security</a>
+          <a href="/#contact">Contact</a>
+        </nav>
+        <p class="footer-copy">&copy; 2026 derhead.app. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script src="/script.js"></script>
+  </body>
+</html>
