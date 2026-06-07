@@ -412,6 +412,11 @@ h3 {
   color: var(--text);
 }
 
+.gauge-value--ok {
+  font-size: 0.9375rem;
+  color: var(--green);
+}
+
 .alert {
   display: flex;
   align-items: center;

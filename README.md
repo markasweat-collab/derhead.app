@@ -1,6 +1,6 @@
 # derhead.app
 
-Powertrain intelligence for diesel pros — a static marketing site deployed via Cloudflare Workers.
+Secure hosting platform for MCP servers and apps built in Cursor — connected to ChatGPT Business.
 
 ## Local preview
 
