@@ -1,0 +1,20 @@
+{
+  "name": "@derhead/mcp",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev --port 8788",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@hono/mcp": "^0.2.3",
+    "@modelcontextprotocol/sdk": "^1.27.1",
+    "hono": "^4.11.4",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260228.0",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.98.0"
+  }
+}
