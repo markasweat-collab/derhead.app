@@ -12,10 +12,11 @@
     "dev:web": "npm run dev -w @derhead/web",
     "dev:api": "npm run dev -w @derhead/api",
     "dev:mcp": "npm run dev -w @derhead/mcp",
-    "deploy:web": "npm run deploy -w @derhead/web",
-    "deploy:api": "npm run deploy -w @derhead/api",
-    "deploy:mcp": "npm run deploy -w @derhead/mcp",
+    "deploy:web": "wrangler deploy",
+    "deploy:api": "wrangler deploy -c apps/api/wrangler.jsonc",
+    "deploy:mcp": "wrangler deploy -c apps/mcp/wrangler.jsonc",
     "deploy:all": "npm run deploy:web && npm run deploy:api && npm run deploy:mcp",
+    "verify:deployments": "node scripts/verify-deployments.js",
     "typecheck": "npm run typecheck -w @derhead/api && npm run typecheck -w @derhead/mcp"
   },
   "devDependencies": {
