@@ -4,10 +4,10 @@ Secure hosting platform for MCP servers and apps built in Cursor — connected t
 
 ## Local preview
 
-Serve the `public/` directory locally:
+Open `index.html` in a browser, or serve locally:
 
 ```bash
-python3 -m http.server 8080 --directory public
+python3 -m http.server 8080
 ```
 
 Then visit http://localhost:8080
@@ -15,19 +15,18 @@ Then visit http://localhost:8080
 ## Deploy
 
 ```bash
-npm install
-npm run deploy
+npx wrangler deploy
 ```
 
-Cloudflare Workers Builds runs `npm run build` then `npm run deploy` on push.
+Cloudflare Workers Builds deploys automatically on push to `main`.
 
 ## Structure
 
-| Path | Purpose |
+| File | Purpose |
 |------|---------|
-| `public/index.html` | Landing page |
-| `public/styles.css` | Styles |
-| `public/script.js` | Mobile nav & waitlist form |
-| `public/favicon.svg` | Site icon |
+| `index.html` | Landing page |
+| `styles.css` | Styles |
+| `script.js` | Mobile nav & waitlist form |
+| `favicon.svg` | Site icon |
 | `wrangler.jsonc` | Cloudflare static assets config |
-| `package.json` | Build & deploy scripts |
+| `.assetsignore` | Excludes non-site files from deploy |
