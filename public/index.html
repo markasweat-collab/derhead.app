@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>derhead.app — Secure hosting for MCP servers &amp; apps</title>
+    <meta
+      name="description"
+      content="derhead.app is a secure hosting platform for MCP servers and apps built in Cursor — ready to connect with ChatGPT Business."
+    />
+    <meta property="og:title" content="derhead.app — Secure hosting for MCP servers &amp; apps" />
+    <meta
+      property="og:description"
+      content="Host MCP servers and Cursor-built apps on secure infrastructure, connected to ChatGPT Business."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://derhead.app" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="logo" href="/">
+          <span class="logo-mark" aria-hidden="true"></span>
+          derhead<span class="logo-dot">.app</span>
+        </a>
+
+        <button
+          class="nav-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="site-nav"
+        >
+          <span class="nav-toggle-bar"></span>
+          <span class="nav-toggle-bar"></span>
+          <span class="sr-only">Menu</span>
+        </button>
+
+        <nav id="site-nav" class="site-nav">
+          <a href="#features">Features</a>
+          <a href="#how-it-works">How it works</a>
+          <a href="#about">About</a>
+          <a class="nav-cta" href="#contact">Get early access</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">Secure MCP hosting</p>
+            <h1>Your apps. Your servers. Connected to ChatGPT Business.</h1>
+            <p class="lead">
+              derhead.app is the secure home for MCP servers and apps you build in
+              Cursor — deployed, protected, and ready to plug into ChatGPT Business
+              so your team can use custom tools without compromising security.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#contact">Join the waitlist</a>
+              <a class="btn btn-ghost" href="#features">See what's included</a>
+            </div>
+            <ul class="hero-stats" aria-label="Platform highlights">
+              <li>
+                <strong>MCP</strong>
+                <span>Server hosting &amp; routing</span>
+              </li>
+              <li>
+                <strong>Secure</strong>
+                <span>Auth, TLS, access control</span>
+              </li>
+              <li>
+                <strong>ChatGPT</strong>
+                <span>Business-ready integrations</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="hero-panel" aria-hidden="true">
+            <div class="panel-header">
+              <span class="panel-dot panel-dot--green"></span>
+              <span class="panel-dot panel-dot--amber"></span>
+              <span class="panel-dot panel-dot--red"></span>
+              <span class="panel-title">inventory-server · mcp.derhead.app</span>
+            </div>
+            <div class="panel-body">
+              <div class="gauge-row">
+                <div class="gauge">
+                  <span class="gauge-label">Status</span>
+                  <span class="gauge-value gauge-value--ok">Healthy</span>
+                </div>
+                <div class="gauge">
+                  <span class="gauge-label">Latency</span>
+                  <span class="gauge-value">42ms</span>
+                </div>
+                <div class="gauge">
+                  <span class="gauge-label">Uptime</span>
+                  <span class="gauge-value">99.9%</span>
+                </div>
+              </div>
+              <div class="alert alert--ok">
+                <span class="alert-icon">✓</span>
+                ChatGPT Business connected · all endpoints verified
+              </div>
+              <div class="code-list">
+                <div class="code-item">
+                  <span>get_inventory</span>
+                  <span class="code-status">Tool · active</span>
+                </div>
+                <div class="code-item">
+                  <span>update_stock</span>
+                  <span class="code-status">Tool · active</span>
+                </div>
+                <div class="code-item">
+                  <span>search_catalog</span>
+                  <span class="code-status code-status--warn">Resource · syncing</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="features" class="section">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Features</p>
+            <h2>Everything you need to ship MCP to production.</h2>
+            <p class="section-lead">
+              Build in Cursor, deploy to derhead.app, and give ChatGPT Business
+              access to your custom tools — with security baked in from the start.
+            </p>
+          </div>
+
+          <div class="feature-grid">
+            <article class="feature-card">
+              <div class="feature-icon" aria-hidden="true">🔒</div>
+              <h3>Secure by default</h3>
+              <p>
+                TLS everywhere, authenticated endpoints, and access controls so
+                only authorized ChatGPT Business workspaces reach your servers.
+              </p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon" aria-hidden="true">⚡</div>
+              <h3>MCP server hosting</h3>
+              <p>
+                Deploy Model Context Protocol servers with stable URLs, health
+                checks, and routing — no duct-taping tunnels for every project.
+              </p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon" aria-hidden="true">💬</div>
+              <h3>ChatGPT Business ready</h3>
+              <p>
+                Connect your hosted MCP servers directly to ChatGPT Business so
+                your team gets custom tools inside their existing workflow.
+              </p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon" aria-hidden="true">🛠</div>
+              <h3>Built for Cursor</h3>
+              <p>
+                Designed around how you actually build — ship apps and MCP servers
+                from Cursor and publish them to derhead in a few steps.
+              </p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon" aria-hidden="true">📦</div>
+              <h3>App catalog</h3>
+              <p>
+                One place to host and manage every MCP server and app you build —
+                versioned, organized, and easy to hand off to your team.
+              </p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon" aria-hidden="true">📊</div>
+              <h3>Observability</h3>
+              <p>
+                Monitor uptime, request volume, and errors across all your hosted
+                servers so you know when something needs attention.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="how-it-works" class="section section--alt">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">How it works</p>
+            <h2>From Cursor to ChatGPT Business in three steps.</h2>
+          </div>
+
+          <ol class="steps">
+            <li class="step">
+              <span class="step-number">1</span>
+              <div>
+                <h3>Build in Cursor</h3>
+                <p>
+                  Create MCP servers and apps in Cursor — tools, resources, and
+                  integrations tailored to how your business actually operates.
+                </p>
+              </div>
+            </li>
+            <li class="step">
+              <span class="step-number">2</span>
+              <div>
+                <h3>Deploy to derhead.app</h3>
+                <p>
+                  Push to secure hosting with authenticated endpoints, stable URLs,
+                  and infrastructure you don't have to babysit.
+                </p>
+              </div>
+            </li>
+            <li class="step">
+              <span class="step-number">3</span>
+              <div>
+                <h3>Connect ChatGPT Business</h3>
+                <p>
+                  Point your ChatGPT Business workspace at your hosted MCP servers
+                  and give your team custom capabilities inside ChatGPT.
+                </p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="about" class="section">
+        <div class="container about-grid">
+          <div>
+            <p class="eyebrow">About</p>
+            <h2>A secure home for the tools you build.</h2>
+            <p class="section-lead">
+              derhead.app exists because custom MCP servers shouldn't live on
+              localhost forever — and they shouldn't require you to compromise on
+              security to get them into ChatGPT Business.
+            </p>
+            <p class="section-lead">
+              We're building the hosting layer: one trusted place to deploy,
+              protect, and manage every MCP server and app you ship from Cursor.
+            </p>
+          </div>
+          <blockquote class="pull-quote">
+            <p>
+              "Build the tool in Cursor. Host it on derhead. Your team uses it
+              in ChatGPT Business — without exposing your stack to the open
+              internet."
+            </p>
+            <footer>— The derhead.app vision</footer>
+          </blockquote>
+        </div>
+      </section>
+
+      <section id="contact" class="section section--cta">
+        <div class="container cta-card">
+          <div class="cta-copy">
+            <p class="eyebrow">Early access</p>
+            <h2>Get on the list.</h2>
+            <p>
+              We're opening hosting to early adopters first. Drop your email and
+              we'll reach out when your workspace is ready.
+            </p>
+          </div>
+          <form class="waitlist-form">
+            <label class="sr-only" for="email">Email address</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="you@company.com"
+              required
+              autocomplete="email"
+            />
+            <button class="btn btn-primary" type="submit">Request access</button>
+          </form>
+          <p class="cta-note">No spam. Just a heads-up when hosting opens up.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div class="footer-brand">
+          <a class="logo logo--footer" href="/">
+            <span class="logo-mark" aria-hidden="true"></span>
+            derhead<span class="logo-dot">.app</span>
+          </a>
+          <p>Secure hosting for MCP servers and Cursor-built apps.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer">
+          <a href="#features">Features</a>
+          <a href="#how-it-works">How it works</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
+        </nav>
+        <p class="footer-copy">&copy; 2026 derhead.app. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
