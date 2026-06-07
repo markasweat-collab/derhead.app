@@ -168,6 +168,23 @@ packages/
 | `/docs/` | Getting started |
 | `/security/` | Security architecture |
 | `/blog/` | Changelog |
-| `/app/` | Dashboard (private beta) |
+| `/app/` | Dashboard (API token sign-in) |
 
-Dashboard preview: `/app/?preview=1`
+Dashboard preview (static UI): `/app/?preview=1`
+
+### Optional: persist waitlist signups in KV
+
+By default, waitlist signups are logged in the API worker's Cloudflare Logs. To persist emails in KV:
+
+```bash
+npx wrangler kv namespace create WAITLIST -c apps/api/wrangler.jsonc
+```
+
+Add the returned `id` to `apps/api/wrangler.jsonc`:
+
+```jsonc
+"kv_namespaces": [{ "binding": "WAITLIST", "id": "<your-kv-id>" }]
+```
+
+Redeploy the API worker.
+

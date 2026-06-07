@@ -128,9 +128,19 @@ curl -H "Authorization: Bearer &lt;token&gt;" \
   https://api.derhead.app/v1/status</div>
           <ul>
             <li><code>GET /health</code> — public, minimal response</li>
+            <li><code>POST /v1/waitlist</code> — public, rate limited (join waitlist)</li>
             <li><code>GET /v1/status</code> — requires auth</li>
             <li><code>GET /v1/info</code> — requires auth</li>
+            <li><code>GET /v1/services</code> — requires auth, live health checks</li>
           </ul>
+
+          <h2>App dashboard</h2>
+          <p>
+            Sign in at <a href="/app/">/app/</a> with the same
+            <code>API_AUTH_TOKEN</code> you set on the API worker. The dashboard
+            calls <code>/api/v1/*</code> through the web worker proxy — no CORS
+            setup required.
+          </p>
 
           <h2>Build in Cursor</h2>
           <p>The typical workflow:</p>

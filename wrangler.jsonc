@@ -9,5 +9,8 @@
   "assets": {
     "directory": "./apps/web/public",
     "binding": "ASSETS"
+  },
+  "vars": {
+    "API_ORIGIN": "https://derhead-api.mark-a-sweat.workers.dev"
   }
 }
