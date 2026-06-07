@@ -9,8 +9,11 @@
   const loginError = document.getElementById("login-error");
   const signOutButton = document.getElementById("sign-out");
   const servicesBody = document.getElementById("services-body");
-  const statusValue = document.getElementById("dashboard-status");
-  const environmentValue = document.getElementById("dashboard-environment");
+  const apiStatus = document.getElementById("api-status");
+  const mcpStatus = document.getElementById("mcp-status");
+  const tokenStatus = document.getElementById("token-status");
+  const serverCount = document.getElementById("server-count");
+  const lastCheck = document.getElementById("last-check");
 
   if (!loginView || !dashboardView) {
     return;
@@ -97,26 +100,33 @@
         return;
       }
 
-      const status = await statusResponse.json();
       const servicesPayload = await servicesResponse.json();
+      const services = Array.isArray(servicesPayload.services)
+        ? servicesPayload.services
+        : [];
 
-      if (statusValue) {
-        statusValue.textContent =
-          status.status === "operational" ? "Operational" : status.status;
-        statusValue.className =
-          "app-stat-value " +
-          (status.status === "operational"
-            ? "app-stat-value--ok"
-            : "app-stat-value--warn");
-      }
+      const api = services.find((service) => service.id === "api");
+      const mcp = services.find((service) => service.id === "mcp");
+      const checkedAt = new Date();
 
-      if (environmentValue) {
-        environmentValue.textContent = status.environment ?? "production";
-      }
+      setMetric(apiStatus, serviceOnlineLabel(api?.status), api?.status === "healthy");
+      setMetric(mcpStatus, serviceOnlineLabel(mcp?.status), mcp?.status === "healthy");
+      setMetric(tokenStatus, "configured", true);
+      setMetric(
+        serverCount,
+        String(mcp?.status === "healthy" ? 1 : 0),
+        mcp?.status === "healthy",
+      );
+      setMetric(
+        lastCheck,
+        formatTimestamp(checkedAt),
+        true,
+        true,
+      );
 
-      if (servicesBody && Array.isArray(servicesPayload.services)) {
+      if (servicesBody) {
         servicesBody.innerHTML = "";
-        for (const service of servicesPayload.services) {
+        for (const service of services) {
           const row = document.createElement("tr");
           const pillClass =
             service.status === "healthy"
@@ -138,6 +148,36 @@
     }
   }
 
+  function serviceOnlineLabel(status) {
+    if (status === "healthy") return "online";
+    if (status === "degraded") return "degraded";
+    return "offline";
+  }
+
+  function formatTimestamp(date) {
+    return date.toLocaleString(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+  }
+
+  function setMetric(element, text, ok, muted = false) {
+    if (!element) return;
+    element.textContent = text;
+    element.className = "dashboard-value";
+    if (muted) {
+      element.classList.add("dashboard-value--muted");
+    } else if (ok) {
+      element.classList.add("dashboard-value--ok");
+    } else {
+      element.classList.add("dashboard-value--warn");
+    }
+  }
+
   function showDashboard() {
     loginView.hidden = true;
     dashboardView.hidden = false;
@@ -150,13 +190,12 @@
   }
 
   function setPreviewData() {
-    if (statusValue) {
-      statusValue.textContent = "Preview";
-      statusValue.className = "app-stat-value app-stat-value--warn";
-    }
-    if (environmentValue) {
-      environmentValue.textContent = "demo";
-    }
+    setMetric(apiStatus, "online", true);
+    setMetric(mcpStatus, "online", true);
+    setMetric(tokenStatus, "configured", true);
+    setMetric(serverCount, "1", true);
+    setMetric(lastCheck, formatTimestamp(new Date()), true, true);
+
     if (servicesBody) {
       servicesBody.innerHTML = `
         <tr><td>derhead-mcp</td><td>mcp.derhead.app</td><td><span class="status-pill status-pill--ok">Healthy</span></td><td>Bearer token</td></tr>

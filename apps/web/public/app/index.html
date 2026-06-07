@@ -60,11 +60,30 @@
           <button class="btn btn-ghost btn-block" id="sign-out" type="button">Sign out</button>
         </aside>
         <div class="app-main">
-          <div class="app-stats">
-            <div class="app-stat"><span class="app-stat-label">Platform</span><span class="app-stat-value" id="dashboard-status">—</span></div>
-            <div class="app-stat"><span class="app-stat-label">Environment</span><span class="app-stat-value" id="dashboard-environment">—</span></div>
-            <div class="app-stat"><span class="app-stat-label">Services</span><span class="app-stat-value">3</span></div>
-            <div class="app-stat"><span class="app-stat-label">Session</span><span class="app-stat-value app-stat-value--ok">Active</span></div>
+          <h1 class="dashboard-title">Derhead Dashboard</h1>
+          <div class="dashboard-panel">
+            <dl class="dashboard-metrics">
+              <div class="dashboard-metric">
+                <dt>API status</dt>
+                <dd><span class="dashboard-value" id="api-status">—</span></dd>
+              </div>
+              <div class="dashboard-metric">
+                <dt>MCP status</dt>
+                <dd><span class="dashboard-value" id="mcp-status">—</span></dd>
+              </div>
+              <div class="dashboard-metric">
+                <dt>Your token</dt>
+                <dd><span class="dashboard-value" id="token-status">—</span></dd>
+              </div>
+              <div class="dashboard-metric">
+                <dt>Servers</dt>
+                <dd><span class="dashboard-value" id="server-count">—</span></dd>
+              </div>
+              <div class="dashboard-metric">
+                <dt>Last check</dt>
+                <dd><span class="dashboard-value dashboard-value--muted" id="last-check">—</span></dd>
+              </div>
+            </dl>
           </div>
           <div class="app-table-wrap">
             <div class="app-table-header"><h2>Deployed services</h2><span class="status-pill status-pill--ok">Live checks</span></div>
