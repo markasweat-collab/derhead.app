@@ -2,10 +2,13 @@
   "name": "derhead",
   "private": true,
   "workspaces": [
+    ".",
     "apps/*",
     "packages/*"
   ],
   "scripts": {
+    "build": "node scripts/verify-web-assets.js",
+    "deploy": "wrangler deploy",
     "dev:web": "npm run dev -w @derhead/web",
     "dev:api": "npm run dev -w @derhead/api",
     "dev:mcp": "npm run dev -w @derhead/mcp",
@@ -14,5 +17,8 @@
     "deploy:mcp": "npm run deploy -w @derhead/mcp",
     "deploy:all": "npm run deploy:web && npm run deploy:api && npm run deploy:mcp",
     "typecheck": "npm run typecheck -w @derhead/api && npm run typecheck -w @derhead/mcp"
+  },
+  "devDependencies": {
+    "wrangler": "^4.98.0"
   }
 }
