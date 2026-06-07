@@ -21,16 +21,68 @@
   }
 
   document.querySelectorAll(".waitlist-form").forEach((form) => {
-    form.addEventListener("submit", (event) => {
+    form.addEventListener("submit", async (event) => {
       event.preventDefault();
-      const email = form.querySelector('input[type="email"]')?.value;
+      if (!(form instanceof HTMLFormElement)) return;
+
+      const emailInput = form.querySelector('input[name="email"]');
+      const honeypot = form.querySelector('input[name="company"]');
+      const status = form.querySelector(".form-status");
+      const submitButton = form.querySelector('button[type="submit"]');
+
+      const email =
+        emailInput instanceof HTMLInputElement ? emailInput.value.trim() : "";
       if (!email) return;
 
-      const subject = encodeURIComponent("Waitlist request");
-      const body = encodeURIComponent(
-        `Please add me to the derhead.app waitlist.\n\nEmail: ${email}`,
-      );
-      window.location.href = `mailto:hello@derhead.app?subject=${subject}&body=${body}`;
+      if (submitButton instanceof HTMLButtonElement) {
+        submitButton.disabled = true;
+      }
+
+      if (status instanceof HTMLElement) {
+        status.hidden = true;
+        status.textContent = "";
+        status.classList.remove("form-status--error", "form-status--success");
+      }
+
+      try {
+        const response = await fetch("/api/v1/waitlist", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email,
+            company:
+              honeypot instanceof HTMLInputElement ? honeypot.value : "",
+          }),
+        });
+
+        const payload = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(payload.error ?? "Could not join waitlist");
+        }
+
+        if (status instanceof HTMLElement) {
+          status.hidden = false;
+          status.classList.add("form-status--success");
+          status.textContent =
+            payload.message ?? "You're on the list. We'll be in touch.";
+        }
+
+        form.reset();
+      } catch (error) {
+        if (status instanceof HTMLElement) {
+          status.hidden = false;
+          status.classList.add("form-status--error");
+          status.textContent =
+            error instanceof Error
+              ? error.message
+              : "Something went wrong. Try again.";
+        }
+      } finally {
+        if (submitButton instanceof HTMLButtonElement) {
+          submitButton.disabled = false;
+        }
+      }
     });
   });
 
@@ -42,15 +94,4 @@
       item?.classList.toggle("is-open", !expanded);
     });
   });
-
-  const loginView = document.getElementById("login-view");
-  const dashboardPreview = document.getElementById("dashboard-preview");
-  if (
-    loginView &&
-    dashboardPreview &&
-    new URLSearchParams(location.search).get("preview") === "1"
-  ) {
-    loginView.hidden = true;
-    dashboardPreview.hidden = false;
-  }
 })();

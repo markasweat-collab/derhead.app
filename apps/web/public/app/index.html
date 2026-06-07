@@ -30,38 +30,48 @@
         <div class="login-card">
           <p class="eyebrow">Private beta</p>
           <h1>Sign in to derhead</h1>
-          <p>Dashboard access is invitation-only during early access. No public sign-up — authentication is handled server-side when the app launches on app.derhead.app.</p>
-          <a class="btn btn-primary btn-block" href="/#contact">Request access</a>
-          <p class="login-note">Do not enter credentials here. This page is a preview of the upcoming app UI.</p>
+          <p>Enter your API token to open the dashboard. Use the same token you set as <code>API_AUTH_TOKEN</code> on the API worker.</p>
+          <form id="login-form" class="login-form">
+            <label for="api-token">API token</label>
+            <input
+              id="api-token"
+              name="token"
+              type="password"
+              autocomplete="current-password"
+              placeholder="Paste your API token"
+              required
+            />
+            <button class="btn btn-primary btn-block" type="submit">Sign in</button>
+            <p id="login-error" class="form-status form-status--error" role="alert" hidden></p>
+          </form>
+          <p class="login-note">No token yet? <a href="/#contact">Join the waitlist</a> for early access.</p>
         </div>
       </div>
-      <div class="app-shell" id="dashboard-preview" hidden>
+      <div class="app-shell" id="dashboard-view" hidden>
         <aside class="app-sidebar">
           <nav aria-label="Dashboard">
             <a href="#" class="is-active">Overview</a>
-            <a href="#">MCP Servers</a>
-            <a href="#">API Workers</a>
-            <a href="#">Auth tokens</a>
-            <a href="#">Audit logs</a>
-            <a href="#">Settings</a>
+            <a href="#" aria-disabled="true">MCP Servers</a>
+            <a href="#" aria-disabled="true">API Workers</a>
+            <a href="#" aria-disabled="true">Auth tokens</a>
+            <a href="#" aria-disabled="true">Audit logs</a>
+            <a href="#" aria-disabled="true">Settings</a>
           </nav>
+          <button class="btn btn-ghost btn-block" id="sign-out" type="button">Sign out</button>
         </aside>
         <div class="app-main">
-          <div class="app-banner">⚠ Preview mode — dashboard requires authenticated session. Data shown is illustrative only.</div>
           <div class="app-stats">
-            <div class="app-stat"><span class="app-stat-label">MCP servers</span><span class="app-stat-value">1</span></div>
-            <div class="app-stat"><span class="app-stat-label">Status</span><span class="app-stat-value app-stat-value--ok">Healthy</span></div>
-            <div class="app-stat"><span class="app-stat-label">Auth failures (24h)</span><span class="app-stat-value">0</span></div>
-            <div class="app-stat"><span class="app-stat-label">Tool calls (24h)</span><span class="app-stat-value">—</span></div>
+            <div class="app-stat"><span class="app-stat-label">Platform</span><span class="app-stat-value" id="dashboard-status">—</span></div>
+            <div class="app-stat"><span class="app-stat-label">Environment</span><span class="app-stat-value" id="dashboard-environment">—</span></div>
+            <div class="app-stat"><span class="app-stat-label">Services</span><span class="app-stat-value">3</span></div>
+            <div class="app-stat"><span class="app-stat-label">Session</span><span class="app-stat-value app-stat-value--ok">Active</span></div>
           </div>
           <div class="app-table-wrap">
-            <div class="app-table-header"><h2>Deployed services</h2><span class="status-pill status-pill--locked">Auth required</span></div>
+            <div class="app-table-header"><h2>Deployed services</h2><span class="status-pill status-pill--ok">Live checks</span></div>
             <table class="app-table">
               <thead><tr><th>Service</th><th>Domain</th><th>Status</th><th>Auth</th></tr></thead>
-              <tbody>
-                <tr><td>derhead-mcp</td><td>mcp.derhead.app</td><td><span class="status-pill status-pill--ok">Healthy</span></td><td>Bearer token</td></tr>
-                <tr><td>derhead-api</td><td>api.derhead.app</td><td><span class="status-pill status-pill--ok">Healthy</span></td><td>Bearer token</td></tr>
-                <tr><td>derhead-web</td><td>derhead.app</td><td><span class="status-pill status-pill--ok">Healthy</span></td><td>Public (static)</td></tr>
+              <tbody id="services-body">
+                <tr><td colspan="4">Loading service health…</td></tr>
               </tbody>
             </table>
           </div>
@@ -76,5 +86,6 @@
       </div>
     </footer>
     <script src="/script.js"></script>
+    <script src="/app/app.js"></script>
   </body>
 </html>

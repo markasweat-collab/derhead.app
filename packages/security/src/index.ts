@@ -175,6 +175,13 @@ export function authRateLimitMiddleware(): MiddlewareHandler {
   );
 }
 
+export function waitlistRateLimitMiddleware(): MiddlewareHandler {
+  return rateLimitMiddleware(
+    { maxAttempts: 5, windowMs: 3_600_000 },
+    (c) => `waitlist:${clientIp(c)}`,
+  );
+}
+
 export function requireBearerAuth(tokenEnvKey: string): MiddlewareHandler {
   return async (c, next) => {
     const expected = (c.env as Record<string, string | undefined>)[tokenEnvKey];

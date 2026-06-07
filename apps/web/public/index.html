@@ -552,7 +552,16 @@
               required
               autocomplete="email"
             />
+            <input
+              type="text"
+              name="company"
+              class="waitlist-honeypot"
+              tabindex="-1"
+              autocomplete="off"
+              aria-hidden="true"
+            />
             <button class="btn btn-primary" type="submit">Request access</button>
+            <p class="form-status" role="status" aria-live="polite" hidden></p>
           </form>
           <p class="cta-note">No spam. Just a heads-up when hosting opens up.</p>
         </div>
