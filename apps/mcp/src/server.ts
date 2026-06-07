@@ -16,9 +16,33 @@ export function createMcpServer(): McpServer {
       inputSchema: {},
     },
     async () => {
-      logEvent("tool.call", { tool: "ping" });
+      logEvent("tool.call", { tool: "ping", success: true });
       return {
         content: [{ type: "text", text: "pong" }],
+      };
+    },
+  );
+
+  server.registerTool(
+    "get_status",
+    {
+      title: "Get Status",
+      description:
+        "Returns MCP server health. Harmless test tool — no side effects.",
+      inputSchema: {},
+    },
+    async () => {
+      logEvent("tool.call", { tool: "get_status", success: true });
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify({
+              status: "healthy",
+              service: "derhead-mcp",
+            }),
+          },
+        ],
       };
     },
   );
@@ -33,7 +57,7 @@ export function createMcpServer(): McpServer {
       },
     },
     async ({ message }) => {
-      logEvent("tool.call", { tool: "echo" });
+      logEvent("tool.call", { tool: "echo", success: true });
       return {
         content: [{ type: "text", text: message }],
       };
@@ -48,7 +72,7 @@ export function createMcpServer(): McpServer {
       inputSchema: {},
     },
     async () => {
-      logEvent("tool.call", { tool: "get_time" });
+      logEvent("tool.call", { tool: "get_time", success: true });
       return {
         content: [{ type: "text", text: new Date().toISOString() }],
       };

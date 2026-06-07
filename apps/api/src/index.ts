@@ -1,10 +1,12 @@
 import { Hono } from "hono";
 import {
+  auditLog,
   authRateLimitMiddleware,
   clientIp,
   corsMiddleware,
   maxBodySizeMiddleware,
   requireBearerAuth,
+  requestLoggingMiddleware,
   securityHeadersMiddleware,
   waitlistRateLimitMiddleware,
 } from "@derhead/security";
@@ -25,22 +27,7 @@ const app = new Hono<{ Bindings: Bindings }>();
 app.use("*", securityHeadersMiddleware());
 app.use("*", corsMiddleware());
 app.use("*", authRateLimitMiddleware());
-
-app.use("*", async (c, next) => {
-  const start = Date.now();
-  await next();
-  console.log(
-    JSON.stringify({
-      service: "derhead-api",
-      event: "request",
-      method: c.req.method,
-      path: new URL(c.req.url).pathname,
-      status: c.res.status,
-      ip: clientIp(c),
-      durationMs: Date.now() - start,
-    }),
-  );
-});
+app.use("*", requestLoggingMiddleware("derhead-api"));
 
 app.get("/health", (c) =>
   c.json({
@@ -88,11 +75,13 @@ app.post(
 
     console.log(
       JSON.stringify({
+        ts: new Date().toISOString(),
         service: "derhead-api",
         event: "waitlist.signup",
-        email,
         ip: clientIp(c),
+        success: true,
         stored: Boolean(c.env.WAITLIST),
+        email,
       }),
     );
 
@@ -103,7 +92,7 @@ app.post(
   },
 );
 
-app.use("/v1/*", requireBearerAuth("API_AUTH_TOKEN"));
+app.use("/v1/*", requireBearerAuth("API_AUTH_TOKEN", { service: "derhead-api" }));
 
 app.get("/v1/status", (c) =>
   c.json({
@@ -178,14 +167,16 @@ app.get("/v1/services", async (c) => {
 app.notFound((c) => c.json({ error: "Not found" }, 404));
 
 app.onError((err, c) => {
-  console.error(
-    JSON.stringify({
-      service: "derhead-api",
-      event: "error",
-      message: err.message,
-      ip: clientIp(c),
-    }),
-  );
+  auditLog({
+    service: "derhead-api",
+    event: "error",
+    ip: clientIp(c),
+    path: new URL(c.req.url).pathname,
+    method: c.req.method,
+    status: 500,
+    success: false,
+    meta: { message: err.message },
+  });
   return c.json({ error: "Internal server error" }, 500);
 });
 

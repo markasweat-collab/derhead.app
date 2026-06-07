@@ -6,6 +6,7 @@ import {
   clientIp,
   corsMiddleware,
   maxBodySizeMiddleware,
+  requestLoggingMiddleware,
   securityHeadersMiddleware,
   verifyBearerToken,
 } from "@derhead/security";
@@ -24,6 +25,7 @@ const app = new Hono<{ Bindings: Bindings }>();
 app.use("*", securityHeadersMiddleware());
 app.use("*", corsMiddleware());
 app.use("*", authRateLimitMiddleware());
+app.use("*", requestLoggingMiddleware("derhead-mcp"));
 
 app.get("/health", (c) =>
   c.json({
@@ -38,14 +40,15 @@ app.all(
   maxBodySizeMiddleware(MAX_BODY_BYTES),
   async (c) => {
     const token = c.env.MCP_AUTH_TOKEN;
+    const ip = clientIp(c);
 
     if (!token) {
-      logEvent("auth.misconfigured");
+      logEvent("auth.misconfigured", { ip, success: false });
       return c.json({ error: "Service unavailable" }, 503);
     }
 
     if (!verifyBearerToken(c.req.header("Authorization"), token)) {
-      logEvent("auth.failed", { path: "/mcp", ip: clientIp(c) });
+      logEvent("auth.failed", { ip, path: "/mcp", success: false });
       return c.json({ error: "Unauthorized" }, 401);
     }
 
@@ -54,13 +57,14 @@ app.all(
       c.req.method === "POST" &&
       !contentType.includes("application/json")
     ) {
+      logEvent("request.rejected", {
+        ip,
+        path: "/mcp",
+        reason: "unsupported_media_type",
+        success: false,
+      });
       return c.json({ error: "Unsupported media type" }, 415);
     }
-
-    logEvent("mcp.request", {
-      method: c.req.method,
-      ip: clientIp(c),
-    });
 
     const mcpServer = createMcpServer();
     const transport = new StreamableHTTPTransport();
@@ -73,7 +77,11 @@ app.all(
 app.notFound((c) => c.json({ error: "Not found" }, 404));
 
 app.onError((err, c) => {
-  logEvent("error", { message: err.message, ip: clientIp(c) });
+  logEvent("error", {
+    ip: clientIp(c),
+    message: err.message,
+    success: false,
+  });
   return c.json({ error: "Internal server error" }, 500);
 });
 
