@@ -3,6 +3,7 @@
   "name": "derhead-mcp",
   "main": "src/index.ts",
   "compatibility_date": "2026-06-06",
+  "workers_dev": true,
   "compatibility_flags": ["nodejs_compat"],
   "observability": {
     "enabled": true
