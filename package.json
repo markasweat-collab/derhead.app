@@ -1,0 +1,12 @@
+{
+  "name": "derhead",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/verify-assets.js",
+    "deploy": "wrangler deploy",
+    "preview": "wrangler dev"
+  },
+  "devDependencies": {
+    "wrangler": "^4.98.0"
+  }
+}
