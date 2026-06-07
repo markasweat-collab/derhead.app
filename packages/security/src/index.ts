@@ -182,15 +182,88 @@ export function waitlistRateLimitMiddleware(): MiddlewareHandler {
   );
 }
 
-export function requireBearerAuth(tokenEnvKey: string): MiddlewareHandler {
+export type AuditLogEntry = {
+  service: string;
+  event: string;
+  ip: string;
+  path: string;
+  method: string;
+  status?: number;
+  success: boolean;
+  durationMs?: number;
+  meta?: Record<string, unknown>;
+};
+
+/** Structured JSON audit log — view in Cloudflare Workers Logs. */
+export function auditLog(entry: AuditLogEntry): void {
+  const { meta, ...fields } = entry;
+  console.log(
+    JSON.stringify({
+      ts: new Date().toISOString(),
+      ...fields,
+      ...(meta ?? {}),
+    }),
+  );
+}
+
+export function requestLoggingMiddleware(service: string): MiddlewareHandler {
+  return async (c, next) => {
+    const start = Date.now();
+    const path = new URL(c.req.url).pathname;
+    const ip = clientIp(c);
+    const method = c.req.method;
+
+    await next();
+
+    auditLog({
+      service,
+      event: "request",
+      ip,
+      path,
+      method,
+      status: c.res.status,
+      success: c.res.status < 400,
+      durationMs: Date.now() - start,
+    });
+  };
+}
+
+export function requireBearerAuth(
+  tokenEnvKey: string,
+  options?: { service?: string },
+): MiddlewareHandler {
   return async (c, next) => {
     const expected = (c.env as Record<string, string | undefined>)[tokenEnvKey];
+    const path = new URL(c.req.url).pathname;
+    const ip = clientIp(c);
 
     if (!expected) {
+      if (options?.service) {
+        auditLog({
+          service: options.service,
+          event: "auth.misconfigured",
+          ip,
+          path,
+          method: c.req.method,
+          status: 503,
+          success: false,
+        });
+      }
       return c.json({ error: "Service unavailable" }, 503);
     }
 
     if (!verifyBearerToken(c.req.header("Authorization"), expected)) {
+      if (options?.service) {
+        auditLog({
+          service: options.service,
+          event: "auth.failed",
+          ip,
+          path,
+          method: c.req.method,
+          status: 401,
+          success: false,
+        });
+      }
       return c.json({ error: "Unauthorized" }, 401);
     }
 

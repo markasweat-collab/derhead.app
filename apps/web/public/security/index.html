@@ -76,7 +76,7 @@
 
           <h2>MCP tool lockdown</h2>
           <ul>
-            <li>Only <code>ping</code>, <code>echo</code>, and <code>get_time</code> are registered — no dynamic tool loading</li>
+            <li>Only <code>ping</code>, <code>get_status</code>, <code>echo</code>, and <code>get_time</code> are registered — no dynamic tool loading</li>
             <li>Max request body: 256 KB</li>
             <li>POST only on <code>/mcp</code> — other methods return 405</li>
             <li>Content-Type must include <code>application/json</code></li>
@@ -87,7 +87,15 @@
           <p>Auth endpoints are rate-limited per IP (20 requests/minute). Excess requests receive <code>429 Too Many Requests</code>. This applies to both API and MCP workers.</p>
 
           <h2>Logging &amp; audit</h2>
-          <p>Structured JSON logs capture request metadata, auth failures, tool invocations, and errors. Logs never include auth tokens or request bodies. Review logs in Cloudflare Workers observability before expanding beyond test tools.</p>
+          <p>Every API and MCP request writes a structured JSON log line to Cloudflare Workers Logs with:</p>
+          <ul>
+            <li><strong>When</strong> — <code>ts</code> (ISO timestamp)</li>
+            <li><strong>Who</strong> — client IP (<code>ip</code>)</li>
+            <li><strong>What</strong> — HTTP method and path (<code>method</code>, <code>path</code>)</li>
+            <li><strong>Outcome</strong> — <code>success</code> (true/false) and HTTP <code>status</code></li>
+            <li><strong>Duration</strong> — <code>durationMs</code></li>
+          </ul>
+          <p>Auth failures (<code>auth.failed</code>) and MCP tool calls (<code>tool.call</code>) are logged separately. Logs never include auth tokens or request bodies.</p>
 
           <h2>Error handling</h2>
           <p>Workers return generic error messages to clients (<code>Unauthorized</code>, <code>Internal server error</code>). Stack traces and internal details are logged server-side only — never returned to callers.</p>
