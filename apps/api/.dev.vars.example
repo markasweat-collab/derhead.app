@@ -1,1 +1,2 @@
 ENVIRONMENT=development
+API_AUTH_TOKEN=dev-api-token-change-me

@@ -34,10 +34,11 @@
 
         <nav id="site-nav" class="site-nav">
           <a href="/#features">Features</a>
-          <a href="/#architecture">Architecture</a>
+          <a href="/pricing/">Pricing</a>
           <a href="/docs/" class="nav-active">Docs</a>
           <a href="/security/">Security</a>
-          <a class="nav-cta" href="/#contact">Get early access</a>
+          <a href="/blog/">Changelog</a>
+          <a class="nav-cta" href="/app/">Sign in</a>
         </nav>
       </div>
     </header>
@@ -113,12 +114,22 @@ npm run deploy</div>
 
           <h2>API endpoints</h2>
           <p>
-            The app API runs separately at api.derhead.app. Available routes:
+            The app API runs at api.derhead.app. Public health check:
           </p>
+          <div class="code-block">curl https://api.derhead.app/health</div>
+          <p>
+            All <code>/v1/*</code> routes require Bearer auth. Set
+            <code>API_AUTH_TOKEN</code> as a Worker secret:
+          </p>
+          <div class="code-block">cd apps/api
+npx wrangler secret put API_AUTH_TOKEN
+
+curl -H "Authorization: Bearer &lt;token&gt;" \
+  https://api.derhead.app/v1/status</div>
           <ul>
-            <li><code>GET /health</code> — service health check</li>
-            <li><code>GET /v1/status</code> — operational status</li>
-            <li><code>GET /v1/info</code> — API metadata and domain map</li>
+            <li><code>GET /health</code> — public, minimal response</li>
+            <li><code>GET /v1/status</code> — requires auth</li>
+            <li><code>GET /v1/info</code> — requires auth</li>
           </ul>
 
           <h2>Build in Cursor</h2>
@@ -150,9 +161,11 @@ npm run deploy</div>
         </div>
         <nav class="footer-nav" aria-label="Footer">
           <a href="/#features">Features</a>
-          <a href="/#architecture">Architecture</a>
+          <a href="/pricing/">Pricing</a>
           <a href="/docs/">Docs</a>
           <a href="/security/">Security</a>
+          <a href="/blog/">Changelog</a>
+          <a href="/app/">App</a>
           <a href="/#contact">Contact</a>
         </nav>
         <p class="footer-copy">&copy; 2026 derhead.app. All rights reserved.</p>

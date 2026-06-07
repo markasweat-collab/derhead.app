@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard — derhead.app</title>
+    <meta name="description" content="derhead.app dashboard — manage MCP servers, auth tokens, and deployments." />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="logo" href="/"><span class="logo-mark" aria-hidden="true"></span>derhead<span class="logo-dot">.app</span></a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="sr-only">Menu</span></button>
+        <nav id="site-nav" class="site-nav">
+          <a href="/#features">Features</a>
+          <a href="/pricing/">Pricing</a>
+          <a href="/docs/">Docs</a>
+          <a href="/security/">Security</a>
+          <a href="/blog/">Changelog</a>
+          <a class="nav-cta nav-active" href="/app/">Sign in</a>
+        </nav>
+      </div>
+    </header>
+    <main id="main">
+      <div class="login-page" id="login-view">
+        <div class="login-card">
+          <p class="eyebrow">Private beta</p>
+          <h1>Sign in to derhead</h1>
+          <p>Dashboard access is invitation-only during early access. No public sign-up — authentication is handled server-side when the app launches on app.derhead.app.</p>
+          <a class="btn btn-primary btn-block" href="/#contact">Request access</a>
+          <p class="login-note">Do not enter credentials here. This page is a preview of the upcoming app UI.</p>
+        </div>
+      </div>
+      <div class="app-shell" id="dashboard-preview" hidden>
+        <aside class="app-sidebar">
+          <nav aria-label="Dashboard">
+            <a href="#" class="is-active">Overview</a>
+            <a href="#">MCP Servers</a>
+            <a href="#">API Workers</a>
+            <a href="#">Auth tokens</a>
+            <a href="#">Audit logs</a>
+            <a href="#">Settings</a>
+          </nav>
+        </aside>
+        <div class="app-main">
+          <div class="app-banner">⚠ Preview mode — dashboard requires authenticated session. Data shown is illustrative only.</div>
+          <div class="app-stats">
+            <div class="app-stat"><span class="app-stat-label">MCP servers</span><span class="app-stat-value">1</span></div>
+            <div class="app-stat"><span class="app-stat-label">Status</span><span class="app-stat-value app-stat-value--ok">Healthy</span></div>
+            <div class="app-stat"><span class="app-stat-label">Auth failures (24h)</span><span class="app-stat-value">0</span></div>
+            <div class="app-stat"><span class="app-stat-label">Tool calls (24h)</span><span class="app-stat-value">—</span></div>
+          </div>
+          <div class="app-table-wrap">
+            <div class="app-table-header"><h2>Deployed services</h2><span class="status-pill status-pill--locked">Auth required</span></div>
+            <table class="app-table">
+              <thead><tr><th>Service</th><th>Domain</th><th>Status</th><th>Auth</th></tr></thead>
+              <tbody>
+                <tr><td>derhead-mcp</td><td>mcp.derhead.app</td><td><span class="status-pill status-pill--ok">Healthy</span></td><td>Bearer token</td></tr>
+                <tr><td>derhead-api</td><td>api.derhead.app</td><td><span class="status-pill status-pill--ok">Healthy</span></td><td>Bearer token</td></tr>
+                <tr><td>derhead-web</td><td>derhead.app</td><td><span class="status-pill status-pill--ok">Healthy</span></td><td>Public (static)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div class="footer-brand"><a class="logo logo--footer" href="/"><span class="logo-mark" aria-hidden="true"></span>derhead<span class="logo-dot">.app</span></a><p>Secure hosting for MCP servers and Cursor-built apps.</p></div>
+        <nav class="footer-nav" aria-label="Footer"><a href="/#features">Features</a><a href="/pricing/">Pricing</a><a href="/docs/">Docs</a><a href="/security/">Security</a><a href="/blog/">Changelog</a><a href="/app/">App</a></nav>
+        <p class="footer-copy">&copy; 2026 derhead.app. All rights reserved.</p>
+      </div>
+    </footer>
+    <script src="/script.js"></script>
+  </body>
+</html>

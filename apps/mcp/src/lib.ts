@@ -19,15 +19,3 @@ export function logEvent(
     }),
   );
 }
-
-export function requireAuth(
-  authorization: string | undefined,
-  expectedToken: string,
-): boolean {
-  if (!authorization?.startsWith("Bearer ")) {
-    return false;
-  }
-
-  const token = authorization.slice("Bearer ".length).trim();
-  return token.length > 0 && token === expectedToken;
-}
