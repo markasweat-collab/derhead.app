@@ -1,0 +1,11 @@
+{
+  "name": "@derhead/security",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "peerDependencies": {
+    "hono": "^4.0.0"
+  }
+}

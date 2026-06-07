@@ -4,157 +4,112 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Security — derhead.app</title>
-    <meta
-      name="description"
-      content="How derhead.app secures MCP servers — authentication, tool allowlists, logging, and deployment isolation."
-    />
+    <meta name="description" content="derhead.app security architecture — authentication, isolation, rate limiting, headers, and MCP lockdown." />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-
     <header class="site-header">
       <div class="container header-inner">
-        <a class="logo" href="/">
-          <span class="logo-mark" aria-hidden="true"></span>
-          derhead<span class="logo-dot">.app</span>
-        </a>
-
-        <button
-          class="nav-toggle"
-          type="button"
-          aria-expanded="false"
-          aria-controls="site-nav"
-        >
-          <span class="nav-toggle-bar"></span>
-          <span class="nav-toggle-bar"></span>
-          <span class="sr-only">Menu</span>
-        </button>
-
+        <a class="logo" href="/"><span class="logo-mark" aria-hidden="true"></span>derhead<span class="logo-dot">.app</span></a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="sr-only">Menu</span></button>
         <nav id="site-nav" class="site-nav">
           <a href="/#features">Features</a>
-          <a href="/#architecture">Architecture</a>
+          <a href="/pricing/">Pricing</a>
           <a href="/docs/">Docs</a>
           <a href="/security/" class="nav-active">Security</a>
-          <a class="nav-cta" href="/#contact">Get early access</a>
+          <a href="/blog/">Changelog</a>
+          <a class="nav-cta" href="/app/">Sign in</a>
         </nav>
       </div>
     </header>
-
     <main id="main">
       <div class="page-hero">
         <div class="container">
           <p class="eyebrow">Security</p>
-          <h1>Built secure from the ground up.</h1>
-          <p class="lead">
-            MCP tools can reach sensitive systems. derhead is designed so you ship
-            with confidence — not hope.
-          </p>
+          <h1>Locked down by default.</h1>
+          <p class="lead">Every layer — public site, API, and MCP — is hardened independently. Nothing is exposed unless it has to be.</p>
         </div>
       </div>
-
       <div class="page-content">
         <div class="container prose">
-          <h2>Deployment isolation</h2>
-          <p>
-            The public website, API, and MCP server run as separate Cloudflare
-            deploys on separate domains. The marketing site at derhead.app has no
-            API routes and no MCP tools — it cannot accidentally expose backend
-            functionality.
-          </p>
-
-          <h2>Authentication</h2>
-          <p>
-            Every request to <code>mcp.derhead.app/mcp</code> requires a valid
-            Bearer token. Requests without a token, or with an invalid token, are
-            rejected with a 401 and logged.
-          </p>
-          <div class="code-block">Authorization: Bearer &lt;MCP_AUTH_TOKEN&gt;</div>
-          <p>
-            Store <code>MCP_AUTH_TOKEN</code> as a Cloudflare Worker secret — never
-            in source code or the public website.
-          </p>
-
-          <h2>Tool allowlists</h2>
-          <p>
-            Only tools explicitly registered in the MCP server code are available.
-            The current allowlist contains harmless test tools only:
-          </p>
-          <ul>
-            <li><strong>ping</strong> — returns "pong"</li>
-            <li><strong>echo</strong> — echoes back a message</li>
-            <li><strong>get_time</strong> — returns the current UTC timestamp</li>
-          </ul>
-          <p>
-            New tools must be deliberately added to the server and deployed. There
-            is no dynamic tool registration that could be exploited at runtime.
-          </p>
-
-          <h2>Logging &amp; audit</h2>
-          <p>
-            Both the API and MCP workers emit structured JSON logs for:
-          </p>
-          <ul>
-            <li>Authentication failures (with source IP)</li>
-            <li>Tool invocations (tool name, timestamp)</li>
-            <li>Request metadata (method, path, duration)</li>
-          </ul>
-          <p>
-            Logs are available through Cloudflare Workers observability. Review them
-            before expanding beyond test tools.
-          </p>
-
-          <h2>What not to do yet</h2>
-          <div class="callout">
-            <p>
-              Do not connect private accounts, production databases, or sensitive
-              third-party APIs until you have verified auth, logging, and tool
-              allowlists in your own environment. Start with test tools, confirm
-              everything works, then expand deliberately.
-            </p>
+          <h2>Defense in depth</h2>
+          <p>derhead.app uses three isolated Cloudflare deploys. A compromise of one surface does not automatically expose the others.</p>
+          <div class="security-matrix">
+            <div class="security-matrix-item"><h3>Public site</h3><p>CSP, HSTS, no API/MCP routes, no secrets, no dynamic server code.</p></div>
+            <div class="security-matrix-item"><h3>API worker</h3><p>Auth on /v1/*, rate limiting, CORS allowlist, generic error responses.</p></div>
+            <div class="security-matrix-item"><h3>MCP worker</h3><p>Bearer auth, body size limits, tool allowlist, Content-Type validation.</p></div>
           </div>
 
-          <h2>TLS &amp; transport</h2>
-          <p>
-            All derhead.app domains are served over HTTPS via Cloudflare. MCP
-            communication uses the Streamable HTTP transport — stateless and
-            compatible with Cloudflare Workers' request/response model.
-          </p>
+          <h2>Authentication</h2>
+          <p><strong>MCP server</strong> — every request to <code>/mcp</code> requires a valid Bearer token. Tokens are compared using constant-time verification to prevent timing attacks. Failed attempts are logged with source IP and rate-limited.</p>
+          <p><strong>API</strong> — <code>/health</code> is public and returns minimal data. All <code>/v1/*</code> routes require <code>API_AUTH_TOKEN</code> via Bearer header. Store tokens as Cloudflare Worker secrets only.</p>
+          <div class="code-block">Authorization: Bearer &lt;token&gt;</div>
 
-          <h2>Reporting issues</h2>
-          <p>
-            Found a security concern? Email
-            <a href="mailto:security@derhead.app">security@derhead.app</a>.
-          </p>
+          <h2>Network &amp; transport</h2>
+          <ul>
+            <li>TLS 1.3 enforced via Cloudflare on all domains</li>
+            <li>HSTS with <code>includeSubDomains</code> and preload on public site</li>
+            <li>Strict CORS — browser requests from unknown origins are rejected with 403</li>
+            <li>Server-to-server requests (no Origin header) allowed for ChatGPT Business MCP clients</li>
+          </ul>
 
-          <p>
-            Ready to deploy? See the <a href="/docs/">getting started guide</a>.
-          </p>
+          <h2>Security headers (all Workers)</h2>
+          <ul>
+            <li><code>X-Content-Type-Options: nosniff</code></li>
+            <li><code>X-Frame-Options: DENY</code></li>
+            <li><code>Referrer-Policy: strict-origin-when-cross-origin</code></li>
+            <li><code>Cross-Origin-Opener-Policy: same-origin</code></li>
+            <li><code>Cross-Origin-Resource-Policy: same-origin</code></li>
+            <li><code>Cache-Control: no-store</code> on API/MCP responses</li>
+          </ul>
+
+          <h2>Public site CSP</h2>
+          <p>The marketing site enforces a strict Content Security Policy via Cloudflare Pages <code>_headers</code>:</p>
+          <ul>
+            <li>Scripts: same-origin only (no inline scripts)</li>
+            <li>Styles: same-origin only</li>
+            <li><code>frame-ancestors 'none'</code> — cannot be embedded in iframes</li>
+            <li><code>upgrade-insecure-requests</code> — no mixed content</li>
+          </ul>
+
+          <h2>MCP tool lockdown</h2>
+          <ul>
+            <li>Only <code>ping</code>, <code>echo</code>, and <code>get_time</code> are registered — no dynamic tool loading</li>
+            <li>Max request body: 256 KB</li>
+            <li>POST only on <code>/mcp</code> — other methods return 405</li>
+            <li>Content-Type must include <code>application/json</code></li>
+            <li>Health endpoint returns minimal info — no tool enumeration in production responses</li>
+          </ul>
+
+          <h2>Rate limiting</h2>
+          <p>Auth endpoints are rate-limited per IP (20 requests/minute). Excess requests receive <code>429 Too Many Requests</code>. This applies to both API and MCP workers.</p>
+
+          <h2>Logging &amp; audit</h2>
+          <p>Structured JSON logs capture request metadata, auth failures, tool invocations, and errors. Logs never include auth tokens or request bodies. Review logs in Cloudflare Workers observability before expanding beyond test tools.</p>
+
+          <h2>Error handling</h2>
+          <p>Workers return generic error messages to clients (<code>Unauthorized</code>, <code>Internal server error</code>). Stack traces and internal details are logged server-side only — never returned to callers.</p>
+
+          <h2>What we don't do yet</h2>
+          <div class="callout">
+            <p>Do not connect production databases, private OAuth accounts, or sensitive third-party APIs until you have verified auth, logging, and allowlists in your environment. SSO and per-tenant isolation are on the roadmap.</p>
+          </div>
+
+          <h2>Responsible disclosure</h2>
+          <p>Report vulnerabilities to <a href="mailto:security@derhead.app">security@derhead.app</a>. See <a href="/.well-known/security.txt">security.txt</a> for contact details. Do not test against production without authorization.</p>
+          <p><a href="/docs/">Getting started guide →</a></p>
         </div>
       </div>
     </main>
-
     <footer class="site-footer">
       <div class="container footer-inner">
-        <div class="footer-brand">
-          <a class="logo logo--footer" href="/">
-            <span class="logo-mark" aria-hidden="true"></span>
-            derhead<span class="logo-dot">.app</span>
-          </a>
-          <p>Secure hosting for MCP servers and Cursor-built apps.</p>
-        </div>
-        <nav class="footer-nav" aria-label="Footer">
-          <a href="/#features">Features</a>
-          <a href="/#architecture">Architecture</a>
-          <a href="/docs/">Docs</a>
-          <a href="/security/">Security</a>
-          <a href="/#contact">Contact</a>
-        </nav>
+        <div class="footer-brand"><a class="logo logo--footer" href="/"><span class="logo-mark" aria-hidden="true"></span>derhead<span class="logo-dot">.app</span></a><p>Secure hosting for MCP servers and Cursor-built apps.</p></div>
+        <nav class="footer-nav" aria-label="Footer"><a href="/#features">Features</a><a href="/pricing/">Pricing</a><a href="/docs/">Docs</a><a href="/security/">Security</a><a href="/blog/">Changelog</a><a href="/app/">App</a></nav>
         <p class="footer-copy">&copy; 2026 derhead.app. All rights reserved.</p>
       </div>
     </footer>
-
     <script src="/script.js"></script>
   </body>
 </html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Changelog — derhead.app</title>
+    <meta name="description" content="derhead.app platform changelog — releases, security updates, and new features." />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="logo" href="/"><span class="logo-mark" aria-hidden="true"></span>derhead<span class="logo-dot">.app</span></a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="sr-only">Menu</span></button>
+        <nav id="site-nav" class="site-nav">
+          <a href="/#features">Features</a>
+          <a href="/pricing/">Pricing</a>
+          <a href="/docs/">Docs</a>
+          <a href="/security/">Security</a>
+          <a href="/blog/" class="nav-active">Changelog</a>
+          <a class="nav-cta" href="/app/">Sign in</a>
+        </nav>
+      </div>
+    </header>
+    <main id="main">
+      <div class="page-hero">
+        <div class="container">
+          <p class="eyebrow">Changelog</p>
+          <h1>Platform updates</h1>
+          <p class="lead">Security fixes, new features, and infrastructure changes — documented as they ship.</p>
+        </div>
+      </div>
+      <div class="page-content">
+        <div class="container">
+          <div class="blog-list">
+            <article class="blog-card">
+              <div class="blog-meta"><time datetime="2026-06-07">June 7, 2026</time><span class="blog-tag">Security</span></div>
+              <h2><a href="/security/">Platform security hardening</a></h2>
+              <p>Added constant-time token verification, rate limiting on auth endpoints, strict CORS allowlists, security headers on all Workers, CSP/HSTS on the public site, and API auth for /v1/* routes. MCP body size limits and Content-Type validation enforced.</p>
+            </article>
+            <article class="blog-card">
+              <div class="blog-meta"><time datetime="2026-06-07">June 7, 2026</time><span class="blog-tag">Release</span></div>
+              <h2>Three-deploy architecture live</h2>
+              <p>Split derhead.app into separate Cloudflare deploys: Pages for the public site, Workers for api.derhead.app and mcp.derhead.app. Domain boundaries enforced — no MCP tools on the marketing site.</p>
+            </article>
+            <article class="blog-card">
+              <div class="blog-meta"><time datetime="2026-06-07">June 7, 2026</time><span class="blog-tag">MCP</span></div>
+              <h2>Test tools shipped on mcp.derhead.app</h2>
+              <p>Initial MCP server deployed with authenticated access and three harmless test tools: ping, echo, and get_time. Tool allowlist enforced in code — no dynamic tool registration.</p>
+            </article>
+            <article class="blog-card">
+              <div class="blog-meta"><time datetime="2026-06-06">June 6, 2026</time><span class="blog-tag">Launch</span></div>
+              <h2>derhead.app goes live</h2>
+              <p>Initial platform launch on Cloudflare. Public site, API worker scaffold, and MCP worker foundation deployed. Early access waitlist open.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div class="footer-brand"><a class="logo logo--footer" href="/"><span class="logo-mark" aria-hidden="true"></span>derhead<span class="logo-dot">.app</span></a><p>Secure hosting for MCP servers and Cursor-built apps.</p></div>
+        <nav class="footer-nav" aria-label="Footer"><a href="/#features">Features</a><a href="/pricing/">Pricing</a><a href="/docs/">Docs</a><a href="/security/">Security</a><a href="/blog/">Changelog</a><a href="/app/">App</a></nav>
+        <p class="footer-copy">&copy; 2026 derhead.app. All rights reserved.</p>
+      </div>
+    </footer>
+    <script src="/script.js"></script>
+  </body>
+</html>

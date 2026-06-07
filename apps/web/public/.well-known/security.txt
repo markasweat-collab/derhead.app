@@ -1,0 +1,8 @@
+Contact: mailto:security@derhead.app
+Expires: 2027-06-07T00:00:00.000Z
+Preferred-Languages: en
+Policy: https://derhead.app/security/
+Canonical: https://derhead.app/.well-known/security.txt
+
+# derhead.app security contact
+# Report vulnerabilities responsibly — do not test against production without authorization.

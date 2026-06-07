@@ -42,4 +42,15 @@
       item?.classList.toggle("is-open", !expanded);
     });
   });
+
+  const loginView = document.getElementById("login-view");
+  const dashboardPreview = document.getElementById("dashboard-preview");
+  if (
+    loginView &&
+    dashboardPreview &&
+    new URLSearchParams(location.search).get("preview") === "1"
+  ) {
+    loginView.hidden = true;
+    dashboardPreview.hidden = false;
+  }
 })();
