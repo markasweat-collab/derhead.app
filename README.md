@@ -41,49 +41,112 @@ Copy `.dev.vars.example` to `.dev.vars` in each worker app for local secrets.
 
 ## Deploy
 
+Deploy from the **repo root** so the shared `@derhead/security` workspace package resolves.
+
 ```bash
-npm run deploy          # public site (root wrangler → derhead Worker)
-npm run deploy:api      # API worker
-npm run deploy:mcp      # MCP worker
+npm install
+
+npm run deploy          # public site (derhead Worker)
+npm run deploy:api      # API worker → api.derhead.app
+npm run deploy:mcp      # MCP worker → mcp.derhead.app
+npm run deploy:all      # all three
 ```
 
-### Cloudflare Builds (fixes monorepo workspace error)
+### Cloudflare Workers Builds
 
-**Public site (`derhead` Worker)** — existing Git integration, deploy from repo root:
+Create **three separate Workers** projects in the Cloudflare dashboard, all connected to the same GitHub repo. Each project must use the **repo root** as its root directory (not `apps/api` or `apps/mcp` — those paths cannot resolve the workspace package).
+
+#### 1. Public site (`derhead`)
 
 | Setting | Value |
 |---------|-------|
+| Worker name | `derhead` |
 | Root directory | *(empty — repo root)* |
 | Build command | `npm run build` |
 | Deploy command | `npx wrangler deploy` |
 
-Root is registered as a workspace package with `wrangler.jsonc` pointing at `apps/web/public`. A thin Worker handles `www.derhead.app` → `derhead.app` redirects; static assets are served via the `ASSETS` binding.
-
-**API Worker (`derhead-api`)** — separate Cloudflare project:
+#### 2. API (`derhead-api`)
 
 | Setting | Value |
 |---------|-------|
-| Root directory | `apps/api` |
-| Deploy command | `npx wrangler deploy` |
+| Worker name | `derhead-api` |
+| Root directory | *(empty — repo root)* |
+| Build command | `npm ci` |
+| Deploy command | `npx wrangler deploy -c apps/api/wrangler.jsonc` |
 
-**MCP Worker (`derhead-mcp`)** — separate Cloudflare project:
+Custom domain `api.derhead.app` is declared in `apps/api/wrangler.jsonc` and is attached on first deploy.
+
+#### 3. MCP (`derhead-mcp`)
 
 | Setting | Value |
 |---------|-------|
-| Root directory | `apps/mcp` |
-| Deploy command | `npx wrangler deploy` |
+| Worker name | `derhead-mcp` |
+| Root directory | *(empty — repo root)* |
+| Build command | `npm ci` |
+| Deploy command | `npx wrangler deploy -c apps/mcp/wrangler.jsonc` |
+
+Custom domain `mcp.derhead.app` is declared in `apps/mcp/wrangler.jsonc` and is attached on first deploy.
 
 ### Required secrets
 
-```bash
-# API worker
-cd apps/api && npx wrangler secret put API_AUTH_TOKEN
+Generate long random tokens (do not reuse across services):
 
-# MCP worker
-cd apps/mcp && npx wrangler secret put MCP_AUTH_TOKEN
+```bash
+openssl rand -base64 32
 ```
 
-Use long, random tokens. Never commit secrets to git.
+Set each secret once per worker:
+
+```bash
+# API worker
+npx wrangler secret put API_AUTH_TOKEN -c apps/api/wrangler.jsonc
+
+# MCP worker
+npx wrangler secret put MCP_AUTH_TOKEN -c apps/mcp/wrangler.jsonc
+```
+
+Never commit secrets to git.
+
+### Verify deployments
+
+After deploy and secrets are set, run smoke tests from your machine:
+
+```bash
+# Public health checks only
+npm run verify:deployments
+
+# Full auth checks (requires secrets in env)
+API_AUTH_TOKEN='your-api-token' MCP_AUTH_TOKEN='your-mcp-token' npm run verify:deployments
+```
+
+Expected results:
+
+| Check | URL | Expected |
+|-------|-----|----------|
+| API health | `GET https://api.derhead.app/health` | `200`, `{ "ok": true }` |
+| MCP health | `GET https://mcp.derhead.app/health` | `200`, `{ "ok": true }` |
+| API auth | `GET https://api.derhead.app/v1/status` | `401` without token, `200` with Bearer token |
+| MCP auth | `POST https://mcp.derhead.app/mcp` | `401` without token, not `503` with token |
+
+Optional manual API check:
+
+```bash
+curl -sS https://api.derhead.app/health
+curl -sS -H "Authorization: Bearer $API_AUTH_TOKEN" https://api.derhead.app/v1/status
+```
+
+### Local deploy (alternative to dashboard)
+
+If you have `wrangler login` configured locally:
+
+```bash
+npm ci
+npm run deploy:api
+npm run deploy:mcp
+npx wrangler secret put API_AUTH_TOKEN -c apps/api/wrangler.jsonc
+npx wrangler secret put MCP_AUTH_TOKEN -c apps/mcp/wrangler.jsonc
+API_AUTH_TOKEN='...' MCP_AUTH_TOKEN='...' npm run verify:deployments
+```
 
 ## Project structure
 
