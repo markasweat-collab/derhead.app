@@ -87,6 +87,38 @@ Custom domain `api.derhead.app` is declared in `apps/api/wrangler.jsonc` and is 
 
 Custom domain `mcp.derhead.app` is declared in `apps/mcp/wrangler.jsonc` and is attached on first deploy.
 
+### Connect derhead.app (replace Squarespace)
+
+If `derhead.app` still shows your old Squarespace site, the domain is on Cloudflare but traffic is **not** routed to the `derhead` Worker yet.
+
+#### 1. Attach the Worker to your domain
+
+1. [Cloudflare Dashboard](https://dash.cloudflare.com) → **Workers & Pages** → **`derhead`**
+2. **Settings** → **Domains & Routes**
+3. **Add** → **Custom Domain** → `derhead.app`
+4. Repeat for `www.derhead.app`
+
+Or redeploy after merging the latest `wrangler.jsonc` — it declares both custom domains automatically.
+
+#### 2. Remove Squarespace DNS records
+
+1. Cloudflare → **Websites** → **derhead.app** → **DNS** → **Records**
+2. Delete any record pointing to Squarespace, for example:
+   - CNAME `@` → `ext-sq.squarespace.com`
+   - CNAME `www` → `ext-sq.squarespace.com`
+   - A records with Squarespace IPs
+3. After adding the Worker custom domain, Cloudflare creates the correct records for you.
+
+#### 3. Disconnect Squarespace (optional but recommended)
+
+In Squarespace: **Settings** → **Domains** → `derhead.app` → **Disconnect** or remove the domain so it stops claiming the site.
+
+#### 4. Verify
+
+Open `https://derhead.app` — you should see the derhead marketing site (hero: "Secure hosting for MCP servers…"), not Squarespace.
+
+While DNS propagates, the Worker is always reachable at your `*.workers.dev` URL (shown on the `derhead` Worker overview page).
+
 ### Required secrets
 
 Generate long random tokens (do not reuse across services):
