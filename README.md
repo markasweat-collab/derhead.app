@@ -6,10 +6,10 @@ Secure hosting for MCP servers and Cursor-built apps — split across three Clou
 
 | Deploy | Platform | Domain | Purpose |
 |--------|----------|--------|---------|
-| `apps/web` | Cloudflare Pages | `derhead.app`, `www.derhead.app` | Public marketing site only |
+| Root `wrangler.jsonc` | Cloudflare Worker | `derhead.app`, `www.derhead.app` | Public marketing site (`apps/web/public`) |
 | `apps/api` | Cloudflare Worker | `api.derhead.app` | App API routes (auth required on /v1/*) |
 | `apps/mcp` | Cloudflare Worker | `mcp.derhead.app` | Authenticated MCP server |
-| `apps/web/public/app` | Pages (preview) | `app.derhead.app` | Dashboard UI (private beta) |
+| `apps/web/public/app` | (same web deploy) | `app.derhead.app` | Dashboard UI (private beta) |
 
 ## Security
 
@@ -42,10 +42,36 @@ Copy `.dev.vars.example` to `.dev.vars` in each worker app for local secrets.
 ## Deploy
 
 ```bash
-npm run deploy:web
-npm run deploy:api
-npm run deploy:mcp
+npm run deploy          # public site (root wrangler → derhead Worker)
+npm run deploy:api      # API worker
+npm run deploy:mcp      # MCP worker
 ```
+
+### Cloudflare Builds (fixes monorepo workspace error)
+
+**Public site (`derhead` Worker)** — existing Git integration, deploy from repo root:
+
+| Setting | Value |
+|---------|-------|
+| Root directory | *(empty — repo root)* |
+| Build command | `npm run build` |
+| Deploy command | `npx wrangler deploy` |
+
+Root is registered as a workspace package with `wrangler.jsonc` pointing at `apps/web/public`.
+
+**API Worker (`derhead-api`)** — separate Cloudflare project:
+
+| Setting | Value |
+|---------|-------|
+| Root directory | `apps/api` |
+| Deploy command | `npx wrangler deploy` |
+
+**MCP Worker (`derhead-mcp`)** — separate Cloudflare project:
+
+| Setting | Value |
+|---------|-------|
+| Root directory | `apps/mcp` |
+| Deploy command | `npx wrangler deploy` |
 
 ### Required secrets
 
