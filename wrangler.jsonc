@@ -3,9 +3,20 @@
   "name": "derhead",
   "main": "./apps/web/src/worker.ts",
   "compatibility_date": "2026-06-06",
+  "workers_dev": true,
   "observability": {
     "enabled": true
   },
+  "routes": [
+    {
+      "pattern": "derhead.app",
+      "custom_domain": true
+    },
+    {
+      "pattern": "www.derhead.app",
+      "custom_domain": true
+    }
+  ],
   "assets": {
     "directory": "./apps/web/public",
     "binding": "ASSETS"
