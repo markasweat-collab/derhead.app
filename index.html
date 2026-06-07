@@ -3,20 +3,306 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>derhead.app — Coming Soon</title>
+    <title>derhead.app — Powertrain intelligence for diesel pros</title>
     <meta
       name="description"
-      content="derhead.app is under construction. Please check back soon."
+      content="derhead.app is the home base for diesel diagnostics, fleet health, and powertrain intelligence — built for shop people who know the difference."
     />
+    <meta property="og:title" content="derhead.app — Powertrain intelligence for diesel pros" />
+    <meta
+      property="og:description"
+      content="Diagnostics, fleet health, and powertrain intelligence — built for shop people who know the difference."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://derhead.app" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main>
-      <p class="eyebrow">Coming Soon</p>
-      <h1>derhead.app</h1>
-      <p class="lead">
-        We're under construction. Please check back for an update soon.
-      </p>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="logo" href="/">
+          <span class="logo-mark" aria-hidden="true"></span>
+          derhead<span class="logo-dot">.app</span>
+        </a>
+
+        <button
+          class="nav-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="site-nav"
+        >
+          <span class="nav-toggle-bar"></span>
+          <span class="nav-toggle-bar"></span>
+          <span class="sr-only">Menu</span>
+        </button>
+
+        <nav id="site-nav" class="site-nav">
+          <a href="#features">Features</a>
+          <a href="#how-it-works">How it works</a>
+          <a href="#about">About</a>
+          <a class="nav-cta" href="#contact">Get early access</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">Powertrain intelligence</p>
+            <h1>Built for people who live in the shop.</h1>
+            <p class="lead">
+              derhead.app brings diesel diagnostics, fleet health, and real-time
+              engine intelligence into one place — so you spend less time guessing
+              and more time turning wrenches.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#contact">Join the waitlist</a>
+              <a class="btn btn-ghost" href="#features">See what's coming</a>
+            </div>
+            <ul class="hero-stats" aria-label="Platform highlights">
+              <li>
+                <strong>Live</strong>
+                <span>Fault &amp; derate tracking</span>
+              </li>
+              <li>
+                <strong>Fleet</strong>
+                <span>Multi-unit dashboards</span>
+              </li>
+              <li>
+                <strong>Shop</strong>
+                <span>Built by diesel people</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="hero-panel" aria-hidden="true">
+            <div class="panel-header">
+              <span class="panel-dot panel-dot--green"></span>
+              <span class="panel-dot panel-dot--amber"></span>
+              <span class="panel-dot panel-dot--red"></span>
+              <span class="panel-title">unit-042 · paccar mx-13</span>
+            </div>
+            <div class="panel-body">
+              <div class="gauge-row">
+                <div class="gauge">
+                  <span class="gauge-label">Coolant</span>
+                  <span class="gauge-value">192°F</span>
+                </div>
+                <div class="gauge">
+                  <span class="gauge-label">Oil press</span>
+                  <span class="gauge-value">58 psi</span>
+                </div>
+                <div class="gauge">
+                  <span class="gauge-label">Boost</span>
+                  <span class="gauge-value">24 psi</span>
+                </div>
+              </div>
+              <div class="alert alert--ok">
+                <span class="alert-icon">✓</span>
+                No active derate · all systems nominal
+              </div>
+              <div class="code-list">
+                <div class="code-item code-item--clear">
+                  <span>SPN 3251</span>
+                  <span class="code-status">Cleared 2h ago</span>
+                </div>
+                <div class="code-item">
+                  <span>SPN 1569 · FMI 31</span>
+                  <span class="code-status code-status--warn">Monitoring</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="features" class="section">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Features</p>
+            <h2>Everything you need at the bay door.</h2>
+            <p class="section-lead">
+              From single-truck troubleshooting to fleet-wide visibility — derhead
+              is designed around how shops actually work.
+            </p>
+          </div>
+
+          <div class="feature-grid">
+            <article class="feature-card">
+              <div class="feature-icon" aria-hidden="true">⚡</div>
+              <h3>Real-time diagnostics</h3>
+              <p>
+                Live fault codes, derate status, and sensor readings pulled straight
+                from the ECM — no laptop shuffle required.
+              </p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon" aria-hidden="true">📊</div>
+              <h3>Fleet dashboards</h3>
+              <p>
+                See every unit at a glance. Sort by severity, mileage, or shop
+                priority so the right truck gets bay time first.
+              </p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon" aria-hidden="true">🔔</div>
+              <h3>Smart alerts</h3>
+              <p>
+                Get notified when a derate kicks in, a code recurs, or a unit goes
+                offline — before the driver calls you from the shoulder.
+              </p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon" aria-hidden="true">📋</div>
+              <h3>Service history</h3>
+              <p>
+                Track repairs, parts, and code clears per unit. Know what was done
+                last time without digging through paper work orders.
+              </p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon" aria-hidden="true">🔧</div>
+              <h3>Shop workflows</h3>
+              <p>
+                Assign units to techs, log notes, and close out jobs — built for
+                the pace of a real shop floor, not a spreadsheet.
+              </p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon" aria-hidden="true">🔗</div>
+              <h3>Telematics-ready</h3>
+              <p>
+                Connects with the hardware you already run. OBD, J1939, and fleet
+                gateway integrations are on the roadmap.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="how-it-works" class="section section--alt">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">How it works</p>
+            <h2>Up and running in three steps.</h2>
+          </div>
+
+          <ol class="steps">
+            <li class="step">
+              <span class="step-number">1</span>
+              <div>
+                <h3>Connect your units</h3>
+                <p>
+                  Plug in via telematics gateway or shop dongle. derhead reads
+                  live ECM data and starts building a health profile for each truck.
+                </p>
+              </div>
+            </li>
+            <li class="step">
+              <span class="step-number">2</span>
+              <div>
+                <h3>Monitor from anywhere</h3>
+                <p>
+                  Check fault codes, derate status, and key vitals from your phone
+                  or desktop — whether you're in the bay or on the road.
+                </p>
+              </div>
+            </li>
+            <li class="step">
+              <span class="step-number">3</span>
+              <div>
+                <h3>Fix faster, track everything</h3>
+                <p>
+                  Log the repair, clear the code, and move on. Full history stays
+                  attached to the unit so the next tech starts informed.
+                </p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="about" class="section">
+        <div class="container about-grid">
+          <div>
+            <p class="eyebrow">About</p>
+            <h2>Made by diesel people, for diesel people.</h2>
+            <p class="section-lead">
+              derhead.app started in the shop — born from too many hours chasing
+              ghost codes, missed derates, and fleet managers who couldn't get a
+              straight answer on unit status.
+            </p>
+            <p class="section-lead">
+              We're building the tool we wished we had: fast, honest, and focused
+              on the work that actually keeps trucks on the road.
+            </p>
+          </div>
+          <blockquote class="pull-quote">
+            <p>
+              "If you know, you know. derhead is for the ones who don't need the
+              manual explained — they need the data in front of them."
+            </p>
+            <footer>— The derhead team</footer>
+          </blockquote>
+        </div>
+      </section>
+
+      <section id="contact" class="section section--cta">
+        <div class="container cta-card">
+          <div class="cta-copy">
+            <p class="eyebrow">Early access</p>
+            <h2>Get on the list.</h2>
+            <p>
+              We're rolling out to select shops first. Drop your email and we'll
+              reach out when your spot opens up.
+            </p>
+          </div>
+          <form class="waitlist-form">
+            <label class="sr-only" for="email">Email address</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="you@shop.com"
+              required
+              autocomplete="email"
+            />
+            <button class="btn btn-primary" type="submit">Request access</button>
+          </form>
+          <p class="cta-note">No spam. Just a heads-up when we're ready for you.</p>
+        </div>
+      </section>
     </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div class="footer-brand">
+          <a class="logo logo--footer" href="/">
+            <span class="logo-mark" aria-hidden="true"></span>
+            derhead<span class="logo-dot">.app</span>
+          </a>
+          <p>Powertrain intelligence for diesel pros.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer">
+          <a href="#features">Features</a>
+          <a href="#how-it-works">How it works</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
+        </nav>
+        <p class="footer-copy">&copy; 2026 derhead.app. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
   </body>
 </html>
