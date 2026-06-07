@@ -57,7 +57,7 @@ npm run deploy:mcp      # MCP worker
 | Build command | `npm run build` |
 | Deploy command | `npx wrangler deploy` |
 
-Root is registered as a workspace package with `wrangler.jsonc` pointing at `apps/web/public`.
+Root is registered as a workspace package with `wrangler.jsonc` pointing at `apps/web/public`. A thin Worker handles `www.derhead.app` → `derhead.app` redirects; static assets are served via the `ASSETS` binding.
 
 **API Worker (`derhead-api`)** — separate Cloudflare project:
 
