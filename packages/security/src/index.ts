@@ -87,10 +87,10 @@ export function corsMiddleware(allowedOrigins?: string): MiddlewareHandler {
 
       c.header("Access-Control-Allow-Origin", origin);
       c.header("Vary", "Origin");
-      c.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+      c.header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
       c.header(
         "Access-Control-Allow-Headers",
-        "Authorization, Content-Type",
+        "Authorization, Content-Type, Accept, Mcp-Session-Id, Last-Event-Id",
       );
       c.header("Access-Control-Max-Age", "86400");
     }
