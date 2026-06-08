@@ -13,5 +13,12 @@
       "pattern": "mcp.derhead.app",
       "custom_domain": true
     }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "derhead-hometwin",
+      "database_id": "REPLACE_AFTER_D1_CREATE"
+    }
   ]
 }

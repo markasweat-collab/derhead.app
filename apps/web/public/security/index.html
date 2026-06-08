@@ -76,7 +76,7 @@
 
           <h2>MCP tool lockdown</h2>
           <ul>
-            <li>Only <code>ping</code>, <code>get_status</code>, <code>echo</code>, and <code>get_time</code> are registered — no dynamic tool loading</li>
+            <li>Static tool allowlist — no dynamic tool loading. Includes HomeTwin property/measurement/estimator tools plus harmless test tools (<code>ping</code>, <code>get_status</code>, etc.)</li>
             <li>Max request body: 256 KB</li>
             <li>POST only on <code>/mcp</code> — other methods return 405</li>
             <li>Content-Type must include <code>application/json</code></li>

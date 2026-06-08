@@ -15,6 +15,7 @@ import { createMcpServer } from "./server";
 
 type Bindings = {
   MCP_AUTH_TOKEN: string;
+  DB: D1Database;
   ALLOWED_ORIGINS?: string;
 };
 
@@ -66,7 +67,7 @@ app.all(
       return c.json({ error: "Unsupported media type" }, 415);
     }
 
-    const mcpServer = createMcpServer();
+    const mcpServer = createMcpServer({ DB: c.env.DB });
     const transport = new StreamableHTTPTransport();
 
     await mcpServer.connect(transport);

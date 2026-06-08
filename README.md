@@ -189,7 +189,14 @@ apps/
   mcp/src/          MCP Worker
 packages/
   security/         Shared auth, headers, rate limiting, CORS
+  db/               HomeTwin D1 schema, queries, estimators
 ```
+
+## HomeTwin (MCP digital twin)
+
+The MCP worker stores property/room/measurement data in **Cloudflare D1** and exposes HomeTwin tools (properties, measurements, estimators, shopping lists, design validation).
+
+See `docs/HOMETWIN.md` for schema, tool list, and D1 setup (`npm run db:migrate:remote`).
 
 ## Public site pages
 

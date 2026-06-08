@@ -7,6 +7,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@derhead/db": "*",
     "@derhead/security": "*",
     "@hono/mcp": "^0.2.3",
     "@modelcontextprotocol/sdk": "^1.27.1",
