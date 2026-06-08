@@ -20,6 +20,7 @@ type Bindings = {
 };
 
 const MAX_BODY_BYTES = 256_000;
+const MCP_METHODS = ["GET", "POST", "DELETE", "OPTIONS"];
 
 const app = new Hono<{ Bindings: Bindings }>();
 
@@ -37,7 +38,7 @@ app.get("/health", (c) =>
 
 app.all(
   "/mcp",
-  allowedMethodsMiddleware(["POST", "OPTIONS"]),
+  allowedMethodsMiddleware(MCP_METHODS),
   maxBodySizeMiddleware(MAX_BODY_BYTES),
   async (c) => {
     const token = c.env.MCP_AUTH_TOKEN;
@@ -53,10 +54,9 @@ app.all(
       return c.json({ error: "Unauthorized" }, 401);
     }
 
-    const contentType = c.req.header("Content-Type") ?? "";
     if (
       c.req.method === "POST" &&
-      !contentType.includes("application/json")
+      !(c.req.header("Content-Type") ?? "").includes("application/json")
     ) {
       logEvent("request.rejected", {
         ip,
@@ -67,8 +67,13 @@ app.all(
       return c.json({ error: "Unsupported media type" }, 415);
     }
 
+    // Stateless mode: each HTTP request is independent (required on Workers).
+    // ChatGPT discovery uses GET (SSE) + POST (JSON-RPC); stateful sessions
+    // do not survive across Worker isolates.
     const mcpServer = createMcpServer({ DB: c.env.DB });
-    const transport = new StreamableHTTPTransport();
+    const transport = new StreamableHTTPTransport({
+      sessionIdGenerator: undefined,
+    });
 
     await mcpServer.connect(transport);
     return transport.handleRequest(c);
