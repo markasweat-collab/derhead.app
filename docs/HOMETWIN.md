@@ -45,6 +45,45 @@ Each returns `{ quantity, unit, assumptions, confidence }`.
 
 Test tools (`ping`, `get_status`, `echo`, `get_time`) remain for connectivity checks.
 
+## ChatGPT connector
+
+ChatGPT Developer Mode uses **Mixed Authentication**:
+- `initialize`, `tools/list`, and GET SSE discovery are **unauthenticated**
+- `tools/call` (writes/reads data) requires **Bearer** or **X-API-Key**
+
+### Connector setup
+
+1. **Settings → Apps & connectors → Advanced → Developer mode** ON
+2. **Create** connector:
+   - **URL:** `https://mcp.derhead.app/mcp`
+   - **Auth:** No authentication (discovery is public; tool calls still need token — see below)
+3. After deploy, click **Refresh** on the connector
+4. Enable in a **new chat** via the tools picker
+
+For tool execution from ChatGPT, pass your MCP token when prompted or configure OAuth (future).
+
+### Cloudflare (required for ChatGPT)
+
+OpenAI servers must reach `/mcp` without bot challenges. In Cloudflare WAF:
+
+- **If:** `(http.host eq "mcp.derhead.app")`
+- **Then:** Skip → Bot Fight Mode, Security Level, Managed Challenge
+- **Order:** First
+
+Without this, ChatGPT sees the connector name but **no tools** (discovery GET/POST gets HTML challenge pages).
+
+### Verify tool discovery
+
+```bash
+# Should return SSE with tools (no auth required after mixed-auth deploy)
+curl -s -X POST 'https://mcp.derhead.app/mcp' \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json, text/event-stream' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}'
+```
+
+Look for `"name":"list_properties"` in the response.
+
 ## Package layout
 
 ```

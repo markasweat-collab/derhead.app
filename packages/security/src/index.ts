@@ -90,7 +90,7 @@ export function corsMiddleware(allowedOrigins?: string): MiddlewareHandler {
       c.header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
       c.header(
         "Access-Control-Allow-Headers",
-        "Authorization, Content-Type, Accept, Mcp-Session-Id, Last-Event-Id",
+        "Authorization, Content-Type, Accept, Mcp-Session-Id, Last-Event-Id, X-API-Key",
       );
       c.header("Access-Control-Max-Age", "86400");
     }

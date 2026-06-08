@@ -8,8 +8,12 @@ import {
   maxBodySizeMiddleware,
   requestLoggingMiddleware,
   securityHeadersMiddleware,
-  verifyBearerToken,
 } from "@derhead/security";
+import {
+  isPublicMcpDiscoveryRequest,
+  requiresMcpAuth,
+  verifyMcpAuthToken,
+} from "./mcp-auth";
 import { logEvent } from "./lib";
 import { createMcpServer } from "./server";
 
@@ -43,13 +47,20 @@ app.all(
   async (c) => {
     const token = c.env.MCP_AUTH_TOKEN;
     const ip = clientIp(c);
+    const isPublicDiscovery = await isPublicMcpDiscoveryRequest(
+      c.req.method,
+      c.req.raw,
+    );
 
     if (!token) {
       logEvent("auth.misconfigured", { ip, success: false });
       return c.json({ error: "Service unavailable" }, 503);
     }
 
-    if (!verifyBearerToken(c.req.header("Authorization"), token)) {
+    if (
+      requiresMcpAuth(c.req.method, isPublicDiscovery) &&
+      !verifyMcpAuthToken(c.req.raw.headers, token)
+    ) {
       logEvent("auth.failed", { ip, path: "/mcp", success: false });
       return c.json({ error: "Unauthorized" }, 401);
     }
@@ -67,9 +78,16 @@ app.all(
       return c.json({ error: "Unsupported media type" }, 415);
     }
 
+    if (isPublicDiscovery) {
+      logEvent("mcp.discovery", {
+        ip,
+        method: c.req.method,
+        public: true,
+        success: true,
+      });
+    }
+
     // Stateless mode: each HTTP request is independent (required on Workers).
-    // ChatGPT discovery uses GET (SSE) + POST (JSON-RPC); stateful sessions
-    // do not survive across Worker isolates.
     const mcpServer = createMcpServer({ DB: c.env.DB });
     const transport = new StreamableHTTPTransport({
       sessionIdGenerator: undefined,
