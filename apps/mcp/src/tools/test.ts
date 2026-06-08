@@ -1,5 +1,6 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
+import { READ_ONLY_TOOL } from "./annotations";
 import { logEvent } from "../lib";
 
 export function registerTestTools(server: McpServer): void {
@@ -9,6 +10,7 @@ export function registerTestTools(server: McpServer): void {
       title: "Ping",
       description: "Returns pong. Harmless connectivity test.",
       inputSchema: {},
+      ...READ_ONLY_TOOL,
     },
     async () => {
       logEvent("tool.call", { tool: "ping", success: true });
@@ -25,6 +27,7 @@ export function registerTestTools(server: McpServer): void {
       description:
         "Returns MCP server health. Harmless test tool — no side effects.",
       inputSchema: {},
+      ...READ_ONLY_TOOL,
     },
     async () => {
       logEvent("tool.call", { tool: "get_status", success: true });
@@ -51,6 +54,7 @@ export function registerTestTools(server: McpServer): void {
       inputSchema: {
         message: z.string().describe("Message to echo back"),
       },
+      ...READ_ONLY_TOOL,
     },
     async ({ message }) => {
       logEvent("tool.call", { tool: "echo", success: true });
@@ -66,6 +70,7 @@ export function registerTestTools(server: McpServer): void {
       title: "Get Time",
       description: "Returns the current UTC time. Harmless test tool.",
       inputSchema: {},
+      ...READ_ONLY_TOOL,
     },
     async () => {
       logEvent("tool.call", { tool: "get_time", success: true });
