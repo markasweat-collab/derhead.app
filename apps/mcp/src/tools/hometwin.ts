@@ -20,6 +20,7 @@ import {
   updateMeasurement,
   validateDesign,
 } from "@derhead/db";
+import { READ_ONLY_TOOL, WRITE_TOOL } from "./annotations";
 import { logEvent } from "../lib";
 
 type HomeTwinContext = {
@@ -40,6 +41,7 @@ export function registerHomeTwinTools(
       title: "List Properties",
       description: "List all properties in the HomeTwin digital twin database.",
       inputSchema: {},
+      ...READ_ONLY_TOOL,
     },
     async () => {
       const db = requireDb(ctx.db);
@@ -66,6 +68,7 @@ export function registerHomeTwinTools(
       inputSchema: {
         property_id: z.string().describe("Property ID"),
       },
+      ...READ_ONLY_TOOL,
     },
     async ({ property_id }) => {
       const db = requireDb(ctx.db);
@@ -99,6 +102,7 @@ export function registerHomeTwinTools(
         postal_code: z.string().optional(),
         country: z.string().optional(),
       },
+      ...WRITE_TOOL,
     },
     async (input) => {
       const db = requireDb(ctx.db);
@@ -138,6 +142,7 @@ export function registerHomeTwinTools(
         postal_code: z.string().optional(),
         country: z.string().optional(),
       },
+      ...WRITE_TOOL,
     },
     async (input) => {
       const db = requireDb(ctx.db);
@@ -179,6 +184,7 @@ export function registerHomeTwinTools(
         source: z.string().optional(),
         notes: z.string().optional(),
       },
+      ...WRITE_TOOL,
     },
     async (input) => {
       const db = requireDb(ctx.db);
@@ -207,6 +213,7 @@ export function registerHomeTwinTools(
         notes: z.string().optional(),
         room_id: z.string().nullable().optional(),
       },
+      ...WRITE_TOOL,
     },
     async (input) => {
       const db = requireDb(ctx.db);
@@ -237,6 +244,7 @@ export function registerHomeTwinTools(
         room_id: z.string().optional(),
         label: z.string().optional(),
       },
+      ...READ_ONLY_TOOL,
     },
     async (input) => {
       const db = requireDb(ctx.db);
@@ -265,6 +273,7 @@ export function registerHomeTwinTools(
         room_id: z.string().optional(),
         coats: z.number().optional(),
       },
+      ...READ_ONLY_TOOL,
     },
     async (input) => {
       const db = requireDb(ctx.db);
@@ -293,6 +302,7 @@ export function registerHomeTwinTools(
         property_id: z.string(),
         room_id: z.string().optional(),
       },
+      ...READ_ONLY_TOOL,
     },
     async (input) => {
       const db = requireDb(ctx.db);
@@ -321,6 +331,7 @@ export function registerHomeTwinTools(
         property_id: z.string(),
         room_id: z.string().optional(),
       },
+      ...READ_ONLY_TOOL,
     },
     async (input) => {
       const db = requireDb(ctx.db);
@@ -350,6 +361,7 @@ export function registerHomeTwinTools(
         room_id: z.string().optional(),
         panels: z.number().optional(),
       },
+      ...READ_ONLY_TOOL,
     },
     async (input) => {
       const db = requireDb(ctx.db);
@@ -379,6 +391,7 @@ export function registerHomeTwinTools(
         room_id: z.string().optional(),
         waste_factor: z.number().optional(),
       },
+      ...READ_ONLY_TOOL,
     },
     async (input) => {
       const db = requireDb(ctx.db);
@@ -409,6 +422,7 @@ export function registerHomeTwinTools(
         category: z.string().optional(),
         limit: z.number().optional(),
       },
+      ...READ_ONLY_TOOL,
     },
     async (input) => {
       const products = sourceProducts(input);
@@ -439,6 +453,7 @@ export function registerHomeTwinTools(
           }),
         ),
       },
+      ...READ_ONLY_TOOL,
     },
     async ({ products }) => {
       const ranked = compareProducts(products);
@@ -471,6 +486,7 @@ export function registerHomeTwinTools(
           }),
         ),
       },
+      ...WRITE_TOOL,
     },
     async (input) => {
       const db = requireDb(ctx.db);
@@ -499,9 +515,10 @@ export function registerHomeTwinTools(
         property_id: z.string(),
         room_id: z.string().optional(),
         proposed: z
-          .record(z.unknown())
+          .record(z.string())
           .describe("Proposed design fields keyed by constraint label"),
       },
+      ...READ_ONLY_TOOL,
     },
     async (input) => {
       const db = requireDb(ctx.db);

@@ -84,6 +84,12 @@ curl -s -X POST 'https://mcp.derhead.app/mcp' \
 
 Look for `"name":"list_properties"` in the response.
 
+### Plus/Pro vs Business
+
+On **ChatGPT Plus/Pro**, only tools with `readOnlyHint: true` are callable (`list_properties`, `get_property`, estimates, etc.). Write tools (`create_property`, `add_measurement`) require **Business/Enterprise/Edu**.
+
+After deploy, **delete and recreate** the connector, then **Refresh** — ChatGPT caches tool bindings aggressively.
+
 ## Package layout
 
 ```
