@@ -1,0 +1,11 @@
+{
+  "name": "@derhead/db",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "peerDependencies": {
+    "@cloudflare/workers-types": "^4.20260228.0"
+  }
+}

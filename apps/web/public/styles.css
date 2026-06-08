@@ -1626,7 +1626,7 @@ h3 {
     gap: 0.5rem;
   }
 
-  .app-stats {
+  .dashboard-metrics {
     grid-template-columns: 1fr;
   }
 }

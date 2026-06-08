@@ -17,7 +17,9 @@
     "deploy:mcp": "wrangler deploy -c apps/mcp/wrangler.jsonc",
     "deploy:all": "npm run deploy:web && npm run deploy:api && npm run deploy:mcp",
     "verify:deployments": "node scripts/verify-deployments.js",
-    "typecheck": "npm run typecheck -w @derhead/api && npm run typecheck -w @derhead/mcp"
+    "typecheck": "npm run typecheck -w @derhead/api && npm run typecheck -w @derhead/mcp",
+    "db:migrate:local": "wrangler d1 execute derhead-hometwin --local --file=packages/db/migrations/0001_hometwin_schema.sql -c apps/mcp/wrangler.jsonc",
+    "db:migrate:remote": "wrangler d1 execute derhead-hometwin --remote --file=packages/db/migrations/0001_hometwin_schema.sql -c apps/mcp/wrangler.jsonc"
   },
   "devDependencies": {
     "wrangler": "^4.98.0"
